@@ -5,31 +5,31 @@ import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useState, useEffect } from 'react';
 
-const GiftAdd = (props) => {
+const FriendsAdd = (props) => {
+
+    const { navigation, route } = props;
+    const { friend } = route.params;
 
     const userID = useSelector((state)=>state.userID);
     const dispatch = useDispatch();
-    
-    const { navigation, route } = props;
-    const { gift } = route.params;
 
     [update, setUpdate] = useState(false);
 
-    [giftName, setGiftName] = useState(gift.giftName);
-    [price, setPrice] = useState(gift.price);
+    [firstName, setFirstName] = useState(friend.firstName);
+    [lastName, setLastName] = useState(friend.lastName);
 
     const clearInputs = () => {
-        const newGift = {
-            giftName: giftName,
-            price: price,
+        const newFriend = {
+            firstName: firstName,
+            lastName: lastName,
         }
-        setGiftName('');
-        setPrice('');
-        return newGift;
+        setFirstName('');
+        setLastName('');
+        return newFriend;
     }
 
     useEffect(() => {
-        if (gift.key === -1) {
+        if (friend.key === -1) {
           setUpdate(false);
         }
         else {
@@ -37,17 +37,18 @@ const GiftAdd = (props) => {
         }
       }, []);
 
-    const addGift = () => {
-        const newGift = clearInputs();
-        const addAction = { type: actionTypes.ADD_GIFT, payload: { newGift: newGift, userid: userID }};
-        navigation.navigate('Gifts');
+    const addFriend = () => {
+        const newFriend = clearInputs();
+        console.log(newFriend)
+        const addAction = { type: actionTypes.ADD_FRIEND, payload: { newFriend: newFriend, userid: userID }};
         saveAndDispatch(addAction, dispatch);
+        navigation.navigate('Friends');
     }
 
-    const updateGift = () => {
-        const newGift = clearInputs();
-        const updateAction = { type: actionTypes.UPDATE_GIFT, payload: { key: gift.key, newGift: newGift, userid: userID }}
-        navigation.navigate('Gifts');
+    const updateFriend = () => {
+        const newFriends = clearInputs();
+        const updateAction = { type: actionTypes.UPDATE_FRIEND, payload: { key: friend.key, newFriend: newFriends, userid: userID }}
+        navigation.navigate('Friends');
         saveAndDispatch(updateAction, dispatch);
     }
 
@@ -55,38 +56,38 @@ const GiftAdd = (props) => {
         <View style={styles.container}>
             <View style={styles.headerButton}>
                 <TouchableOpacity
-                    onPress={()=>{navigation.navigate('Gifts');}}
+                    onPress={()=>{navigation.navigate('Friends');}}
                     >
                     <Text style={styles.headerButtonText}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={()=>{
                     if (!update) {
-                        addGift();
+                        addFriend();
                     } else {
-                        updateGift();
+                        updateFriend();
                     }
                     }}
                 ><Text style={styles.headerButtonText}>{update ? 'Update' : 'Save'}</Text></TouchableOpacity>
             </View>
-            <Text style={styles.header}>{update ? 'Update Gift' : 'Add Gift'}</Text>
+            <Text style={styles.header}>{update ? 'Update Friend' : 'Add Friend'}</Text>
             <View style={styles.inputPair}>
-                <Text style={styles.inputLabel}>Gift Name:</Text>
+                <Text style={styles.inputLabel}>First Name:</Text>
                 <TextInput
                     style={styles.inputText}
-                    value={giftName}
-                    onChangeText={(text)=>setGiftName(text)}/>
+                    value={firstName}
+                    onChangeText={(text)=>setFirstName(text)}/>
             </View>
             <View style={styles.inputPair}>
-            <Text style={styles.inputLabel}>Price:</Text>
+            <Text style={styles.inputLabel}>Last Name:</Text>
             <TextInput 
                 style={styles.inputText}
-                value={price}
-                onChangeText={(text)=>setPrice(text)}/>
+                value={lastName}
+                onChangeText={(text)=>setLastName(text)}/>
             </View>
             
         </View>
     );
 }
 
-export default GiftAdd;
+export default FriendsAdd;

@@ -1,7 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import styles from '../styles';
 import { useSelector, useDispatch } from "react-redux";
-import { LOAD_GIFT, DELETE_GIFT } from '../data/Reducer';
+import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useEffect } from 'react';
 import { Icon } from '@rneui/themed';
@@ -14,7 +14,7 @@ const Gifts = ({navigation}) => {
 
     const deleteGift = (item) => {
         action = {
-            type: DELETE_GIFT, 
+            type: actionTypes.DELETE_GIFT, 
             payload: {
                 key: item.key,
                 userid: userID,
@@ -24,7 +24,7 @@ const Gifts = ({navigation}) => {
     };
 
     useEffect(() => {
-        const loadGifts = { type: LOAD_GIFT, payload: {userid: userID} };
+        const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
         saveAndDispatch(loadGifts, dispatch);
         console.log('userID = ', userID)
     }, [ userID ]);

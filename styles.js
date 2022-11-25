@@ -13,6 +13,63 @@ const styles = StyleSheet.create({
     marginBottom: '3%',
   },
 
+  //LOGIN SCREEN
+  appName: {
+    fontSize: '40',
+    paddingBottom: '12%',
+    marginTop: '20%',
+  },
+  logInContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flex: 1,
+    width: '100%',
+  },
+  logInInfoContainer: {
+    width: '100%',
+  },
+  logInText: {
+    fontSize: '16',
+    margin: '7%',
+  },
+  logInHeader: {
+    fontSize: '25',
+    textAlign: 'center',
+    margin: '5%',
+    paddingTop: '7%'
+  },
+  logInLabel: { 
+    fontSize: '14',
+    marginLeft: '17%',
+  },
+  logInInput: {
+    marginLeft: '17%',
+    fontSize: '18',
+    paddingTop: '1%',
+    paddingBottom: '5%',
+  },
+  logInButton: {
+    alignSelf: 'center',
+    backgroundColor: '#863A6F',
+    padding: '3%',
+    width: '35%',
+    alignItems: 'center',
+    borderRadius: '10%',
+    margin: '4%'
+  },
+  logInButtonText: {
+    fontSize: '16',
+    color: 'white'
+  },
+  signOutButton: {
+    alignItems: 'flex-end',
+    width: '85%',
+    marginBottom: '2%'
+  },
+  signOutButtonText: {
+    color: '#863A6F'
+  },
+
   //Detail Pages
   editButton: {
     flexDirection: 'row',
@@ -88,6 +145,23 @@ const styles = StyleSheet.create({
     padding: '1%',
     fontSize: '18'
   },
+  calendar: {
+    paddingTop: '2%',
+    paddingLeft: '3%',
+  },
+  calendarText: {
+    flex: 0.6,
+    marginLeft: '3%',
+    marginRight: '2%',
+    borderColor: 'grey',
+    borderStyle: 'solid',
+    borderBottomWidth: '1%',
+    marginTop: '3.5%'
+  },
+  emojiBoard: {
+    marginTop: '10%',
+    flex: 0.8,
+  }
   });
 
 export default styles;

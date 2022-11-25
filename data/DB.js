@@ -1,18 +1,20 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getFirestore, collection, getDocs, setDoc,
+import { getFirestore, collection, getDocs, setDoc, getDoc,
          doc, addDoc, updateDoc, deleteDoc, query, where, orderBy } 
          from 'firebase/firestore';
 import { firebaseConfig } from '../Secrets';
-import { LOAD_GIFT, ADD_GIFT, UPDATE_GIFT, DELETE_GIFT, CREATE_USER } from './Reducer';
+import { actionTypes } from './Reducer';
 import { getAuth } from 'firebase/auth';
 
+////////////
+//FIREBASE//
+////////////
 let firebaseApp, db = undefined;
 const GIFT_LIST_COLLNAME = 'giftLists';
 const FRIEND_COLLNAME = 'friends';
 const GIFT_COLLNAME = 'gifts';
 const USER_COLLNAME = 'users';
 
-// Firebase App Load
 const getFBApp = () => {
     if (!firebaseApp) {
       if (getApps() == 0) {
@@ -24,22 +26,39 @@ const getFBApp = () => {
     return firebaseApp;
 }
 
-//Get Database from Firestore App
 db = getFirestore(getFBApp());
 
-const getFBAuth = () => {
-    return getAuth(getFBApp());
-}
+const getFBAuth = () => { return getAuth(getFBApp());}
 
-//Create User
+////////
+//USER//
+////////
 const createUser = async(action, dispatch) => {
-    const { userId, displayName } = action.payload;
+    const { payload } = action;
+    const { userId, displayName } = payload;
+    console.log(displayName);
     await setDoc(doc(collection(db, USER_COLLNAME), userId), {
       displayName: displayName,
     });
   }
+const loadUser = async(action, dispatch) => {
+    const { payload } = action;
+    const { userId } = payload;
+    console.log(userId);
+    const userInfo = await getDoc(doc(collection(db, USER_COLLNAME), userId));
+    const user = userInfo.data();
+    const displayName = user.displayName;
+    console.log(displayName);
+    let newAction = {
+        ...action, 
+        payload: { displayName }
+    }
+    dispatch(newAction);
+  }
 
-//Load Gift Data
+////////
+//GIFTS//
+////////
 const loadGiftsAndDispatch = async (action, dispatch) => {
     const { payload } = action;
     const { userid } = payload;
@@ -56,8 +75,6 @@ const loadGiftsAndDispatch = async (action, dispatch) => {
     };
     dispatch(newAction);
 }
-  
-//Add Gift
 const addGiftAndDispatch = async (action, dispatch) => {
     const { payload } = action;
     const { newGift, userid } = payload;
@@ -72,8 +89,6 @@ const addGiftAndDispatch = async (action, dispatch) => {
         payload: payload,
     });
 }
-
-//Update Gift
 const updateGiftAndDispatch = async (action, dispatch) => {
     const { payload } = action;
     const { newGift, key, userid } = payload;
@@ -84,8 +99,6 @@ const updateGiftAndDispatch = async (action, dispatch) => {
     });
     dispatch(action);
 }
-
-//Delete Gift
 const deleteGiftAndDispatch = async (action, dispatch) => {
     const { payload } = action;
     const { key, userid } = payload;
@@ -93,25 +106,164 @@ const deleteGiftAndDispatch = async (action, dispatch) => {
     await deleteDoc(docToDelete);
     dispatch(action);
 }
-  
+
+//////////////
+//GIFT LISTS//
+//////////////
+const loadGiftListAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { userid } = payload;
+    const querySnap = await getDocs(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME));
+    let newGiftList = [];
+    querySnap.forEach(docSnap=>{
+        let newList = docSnap.data();
+        newList.key = docSnap.id;
+        newGiftList.push(newList);
+    });
+    let newAction = {
+        ...action,
+        payload: { newGiftList },
+    };
+    dispatch(newAction);
+}
+const addGiftListAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { newList , userid } = payload;
+    const coll = collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME);
+    const newDocRef = await addDoc(coll, {
+        listName: newList.listName,
+        dueDate: newList.dueDate,
+        emoji: newList.emoji,
+    });
+    payload.key = newDocRef.id;
+    dispatch({
+        ...action,
+        payload: payload,
+    });
+}
+const updateGiftListAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { newList, key, userid } = payload;
+    const giftRef = doc(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME), key);
+    await updateDoc(giftRef, {
+        listName: newList.listName,
+        dueDate: newList.dueDate,
+        emoji: newList.emoji,
+    });
+    dispatch(action);
+}
+const deleteGiftListAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { key, userid } = payload;
+    const docToDelete = doc(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME), key);
+    await deleteDoc(docToDelete);
+    dispatch(action);
+}
+
+///////////
+//FRIENDS//
+///////////
+const loadFriendAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { userid } = payload;
+    const querySnap = await getDocs(collection(db, USER_COLLNAME, userid, FRIEND_COLLNAME));
+    let newFriends = [];
+    querySnap.forEach(docSnap=>{
+        let newFriend = docSnap.data();
+        newFriend.key = docSnap.id;
+        newFriends.push(newFriend);
+    });
+    console.log(newFriends);
+    let newAction = {
+        ...action,
+        payload: { newFriends },
+    };
+    dispatch(newAction);
+}
+const addFriendAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { newFriend , userid } = payload;
+    const coll = collection(db, USER_COLLNAME, userid, FRIEND_COLLNAME);
+    const newDocRef = await addDoc(coll, {
+        firstName: newFriend.firstName,
+        lastName: newFriend.lastName,
+    });
+    payload.key = newDocRef.id;
+    dispatch({
+        ...action,
+        payload: payload,
+    });
+}
+const updateFriendAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { newFriend, key, userid } = payload;
+    const friendRef = doc(collection(db, USER_COLLNAME, userid, FRIEND_COLLNAME), key);
+    await updateDoc(friendRef, {
+        firstName: newFriend.firstName,
+        lastName: newFriend.lastName,
+    });
+    dispatch(action);
+}
+const deleteFriendAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { key, userid } = payload;
+    const docToDelete = doc(collection(db, USER_COLLNAME, userid, FRIEND_COLLNAME), key);
+    await deleteDoc(docToDelete);
+    dispatch(action);
+}
+
+/////////////////////
+//SAVE AND DISPATCH//
+/////////////////////
 const saveAndDispatch = async(action, dispatch) => {
     const {type, payload} = action;
     switch (type) {
-        case CREATE_USER:
+        case actionTypes.CREATE_USER:
             createUser(action, dispatch);
             return;
-        case LOAD_GIFT:
+        case actionTypes.LOAD_USER:
+            loadUser(action, dispatch);
+            return;
+
+        case actionTypes.LOAD_GIFT:
             loadGiftsAndDispatch(action, dispatch);
             return;
-        case ADD_GIFT:
+        case actionTypes.ADD_GIFT:
             addGiftAndDispatch(action, dispatch);
             return;
-        case UPDATE_GIFT:
+        case actionTypes.UPDATE_GIFT:
             updateGiftAndDispatch(action, dispatch);
             return;
-        case DELETE_GIFT:
+        case actionTypes.DELETE_GIFT:
             deleteGiftAndDispatch(action, dispatch);
             return; 
+
+        case actionTypes.LOAD_GIFT_LIST:
+            loadGiftListAndDispatch(action, dispatch);
+            return;
+        case actionTypes.ADD_GIFT_LIST:
+            addGiftListAndDispatch(action, dispatch);
+            return;
+        case actionTypes.UPDATE_GIFT_LIST:
+            updateGiftListAndDispatch(action, dispatch);
+            return;
+        case actionTypes.DELETE_GIFT_LIST: 
+            deleteGiftListAndDispatch(action, dispatch);
+            return;
+        
+        case actionTypes.LOAD_FRIEND:
+            loadFriendAndDispatch(action, dispatch);
+            return;
+        case actionTypes.ADD_FRIEND:
+            addFriendAndDispatch(action, dispatch);
+            return;
+        case actionTypes.UPDATE_FRIEND:
+            updateFriendAndDispatch(action, dispatch);
+            return;
+        case actionTypes.DELETE_FRIEND:
+            deleteFriendAndDispatch(action, dispatch);
+            return;
+
         default:
             return;     
     }

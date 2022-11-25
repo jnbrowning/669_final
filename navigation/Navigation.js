@@ -2,12 +2,17 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import GiftLists from "../screens/GiftLists";
 import Friends from "../screens/Friends";
+import FriendsAdd from "../screens/FriendsAdd";
+import FriendsDetail from "../screens/FriendsDetail";
 
 import Gifts from "../screens/Gifts";
 import GiftDetail from "../screens/GiftDetail";
 import GiftAdd from "../screens/GiftAdd";
+
+import GiftLists from "../screens/GiftLists";
+import GiftListDetail from "../screens/GiftListDetail";
+import GiftListAdd from "../screens/GiftListAdd";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,14 +23,14 @@ const GiftListScreenNavigator = () => {
                 name="GiftList"
                 component={GiftLists}
                 />
-            {/* <Stack.Screen 
-                name="Details"
-                component={DetailsScreen}
+            <Stack.Screen 
+                name="GiftListDetail"
+                component={GiftListDetail}
             />
             <Stack.Screen 
-                name="AddContact"
-                component={AddContactScreen}
-            /> */}
+                name="GiftListAdd"
+                component={GiftListAdd}
+            />
         </Stack.Navigator>
     )
 }
@@ -38,6 +43,14 @@ const FriendScreenNavigator = () => {
             <Stack.Screen
                 name="Friends"
                 component={Friends}
+                />
+            <Stack.Screen 
+                name="FriendsDetail"
+                component={FriendsDetail}
+                />
+            <Stack.Screen
+                name="FriendsAdd"
+                component={FriendsAdd}
                 />
         </Stack.Navigator>
     )
