@@ -150,7 +150,7 @@ const updateGiftListAndDispatch = async (action, dispatch) => {
         listName: newList.listName,
         dueDate: newList.dueDate,
         emoji: newList.emoji,
-        friendList: newFriend.friendList,
+        friendList: newList.friendList,
     });
     dispatch(action);
 }

@@ -195,6 +195,12 @@ const styles = StyleSheet.create({
   emojiHeader: {
     fontSize: '75',
   },
+  friendList: {
+    flex: 0.8,
+    textAlign: 'left',
+    padding: '1%',
+    marginBottom: '1%',
+  }
   });
 
 export default styles;

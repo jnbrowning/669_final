@@ -125,7 +125,7 @@ const updateGiftList = (state, itemId, newList) => {
       listName: newList.listName,
       dueDate: newList.dueDate,
       emoji: newList.emoji,
-      friendList: newFriend.friendList,
+      friendList: newList.friendList,
       key: itemId
   }
   let newListItems = giftListItems.map(elem=>elem.key===itemId?updateList:elem);

@@ -8,6 +8,9 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Ionicons } from '@expo/vector-icons';
 import EmojiSelector from 'react-native-emoji-selector';
 
+import { FontAwesome } from '@expo/vector-icons'; 
+
+
 const GiftListAdd = (props) => {
 
     const { navigation, route } = props;
@@ -26,7 +29,7 @@ const GiftListAdd = (props) => {
     [emojiVisible, setEmojiVisible] = useState(false);
     [selectFriend, setSelectFriend] = useState('Select Friend');
     [viewFriends, setViewFriends] = useState(false);
-    [friendList, setFriendList] = useState([]);
+    [friendList, setFriendList] = useState(list.friendList);
 
     const inFriendList = (obj) => {
         console.log(obj.key);
@@ -64,10 +67,12 @@ const GiftListAdd = (props) => {
             listName: listName,
             dueDate: dueDate,
             emoji: emoji,
+            friendList: friendList,
         }
         setListName('');
         setDueDate('');
         setEmoji('X');
+        setFriendList([]);
         return newList;
     }
 
@@ -195,15 +200,17 @@ const GiftListAdd = (props) => {
         
         <View style={styles.inputPair}>
             <Text style={styles.dropDownLabel}>Friends on Gift List: </Text>
-            <View>
-            <FlatList
+        </View>
+        <View style={styles.inputPair}>
+            <View style={styles.friendList}>
+                <FlatList 
                 data={friendList}
                 renderItem={({item})=>{
                     return (
                         <View style={styles.dropDownPair}>
                             <TouchableOpacity 
                                 onPress={()=>{removeFriend(item)}}>
-                                <Ionicons name="md-trash-outline" size={18} color="black" />
+                                <Ionicons name="close" size={12} color="black" />
                             </TouchableOpacity>
                             <Text 
                             onPress={()=>{selectFriend(item)}}
@@ -211,8 +218,7 @@ const GiftListAdd = (props) => {
                             >{item.firstName} {item.lastName}</Text>
                         </View>
                     );}}/>
-
-            </View>
+            </View>  
         </View>
         
         </View>
