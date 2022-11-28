@@ -9,6 +9,7 @@ import FriendsDetail from "../screens/FriendsDetail";
 import Gifts from "../screens/Gifts";
 import GiftDetail from "../screens/GiftDetail";
 import GiftAdd from "../screens/GiftAdd";
+import CameraScreen from "../screens/CameraScreen";
 
 import GiftLists from "../screens/GiftLists";
 import GiftListDetail from "../screens/GiftListDetail";
@@ -72,6 +73,10 @@ const GiftScreenNavigator = () => {
             <Stack.Screen
                 name='GiftAdd'
                 component={GiftAdd}
+                />
+            <Stack.Screen
+                name='Camera'
+                component={CameraScreen}
                 />
         </Stack.Navigator>
     )

@@ -1,15 +1,30 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 import styles from '../styles';
 import { useDispatch, useSelector } from "react-redux";
 import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useState, useEffect } from 'react';
+import { Icon } from '@rneui/themed';
+import { Ionicons } from '@expo/vector-icons'; 
+
 
 const GiftAdd = (props) => {
 
     const userID = useSelector((state)=>state.userID);
+    const giftPicture = useSelector((state)=>state.previewPicture);
+    const newPicture = useSelector((state)=>state.updatePicture);
     const dispatch = useDispatch();
     
+    const savePicture = (pictureObject, updateValue) => {
+        return {
+          type: actionTypes.PREVIEW_PICTURE,
+          payload: {
+            picture: pictureObject,
+            updatePicture: updateValue
+          }
+        }
+    }
+
     const { navigation, route } = props;
     const { gift } = route.params;
 
@@ -19,12 +34,21 @@ const GiftAdd = (props) => {
     [price, setPrice] = useState(gift.price);
 
     const clearInputs = () => {
+        let updatePicture;
+        if (newPicture) {
+            updatePicture = giftPicture;
+        }
+        else {
+            updatePicture = gift.picture;
+        }
         const newGift = {
             giftName: giftName,
             price: price,
+            picture: updatePicture,
         }
         setGiftName('');
         setPrice('');
+        dispatch(savePicture({}, false));
         return newGift;
     }
 
@@ -35,6 +59,7 @@ const GiftAdd = (props) => {
         else {
           setUpdate(true);
         }
+        console.log(giftPicture);
       }, []);
 
     const addGift = () => {
@@ -55,7 +80,9 @@ const GiftAdd = (props) => {
         <View style={styles.container}>
             <View style={styles.headerButton}>
                 <TouchableOpacity
-                    onPress={()=>{navigation.navigate('Gifts');}}
+                    onPress={()=>{
+                        dispatch(savePicture({}, false));
+                        navigation.navigate('Gifts');}}
                     >
                     <Text style={styles.headerButtonText}>Cancel</Text>
                 </TouchableOpacity>
@@ -70,6 +97,38 @@ const GiftAdd = (props) => {
                 ><Text style={styles.headerButtonText}>{update ? 'Update' : 'Save'}</Text></TouchableOpacity>
             </View>
             <Text style={styles.header}>{update ? 'Update Gift' : 'Add Gift'}</Text>
+            {newPicture ?
+                <View style={styles.inputPair}>
+                    <TouchableOpacity
+                onPress={()=> dispatch(savePicture({}, false))}
+                >
+                    <Icon 
+                                name="trash"
+                                type="font-awesome"
+                                size={30}
+                            />
+                </TouchableOpacity>
+                <Image
+                style={styles.addPicture}
+                source={giftPicture}
+                />
+                
+                </View>
+                 : <View>
+                 {update ? 
+                    <Image
+                    style={styles.addPicture}
+                    source={gift.picture}
+                    /> : <></>}
+                </View>
+            }
+            <TouchableOpacity
+                    style={styles.cameraButton}
+                    onPress={()=>{navigation.navigate('Camera')}}
+                >
+                 <Ionicons name="camera-sharp" size={24} color="black" />
+                 <Text>Take New Photo</Text>
+                </TouchableOpacity>
             <View style={styles.inputPair}>
                 <Text style={styles.inputLabel}>Gift Name:</Text>
                 <TextInput
@@ -79,12 +138,13 @@ const GiftAdd = (props) => {
             </View>
             <View style={styles.inputPair}>
             <Text style={styles.inputLabel}>Price:</Text>
+
             <TextInput 
                 style={styles.inputText}
                 value={price}
                 onChangeText={(text)=>setPrice(text)}/>
             </View>
-            
+
         </View>
     );
 }

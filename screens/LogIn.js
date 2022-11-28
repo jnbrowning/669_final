@@ -4,6 +4,7 @@ import { View, Text, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { actionTypes } from '../data/Reducer';
 import { getFBAuth, saveAndDispatch } from '../data/DB';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
@@ -60,6 +61,7 @@ function SignIn () {
         <Text style={styles.logInButtonText}>Sign In</Text>
       </TouchableOpacity>  
     </View>
+
   );
 }
 
@@ -152,6 +154,7 @@ function LogIn ({navigation}) {
     }, []);
 
     return (
+      <KeyboardAwareScrollView>
       <View style={styles.container}>
         <View style={styles.logInContainer}>
           <Text style={styles.appName}>Gift Tracker</Text>
@@ -176,6 +179,7 @@ function LogIn ({navigation}) {
           </View>
         </View>
       </View>
+      </KeyboardAwareScrollView>
     )
 }
 

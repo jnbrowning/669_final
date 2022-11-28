@@ -7,6 +7,7 @@ import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useEffect } from 'react';
 import { Icon } from '@rneui/themed';
+import { Ionicons } from '@expo/vector-icons';
 
 const GiftLists = ({navigation}) => {
 
@@ -60,13 +61,17 @@ const GiftLists = ({navigation}) => {
             data={giftLists}
             renderItem={({item})=>{
                 return (
-                    <View style={styles.item}>
-                        <Text 
-                        style={styles.itemText}
-                        onPress={()=>{navigation.navigate('GiftListDetail', {
-                            list: item,
-                        })}}
-                        >{item.emoji} {item.listName}</Text>
+                    <View style={styles.giftListContainer}>
+                        <Text style={styles.giftListEmoji}>{item.emoji}</Text>
+                        <TouchableOpacity
+                            style={styles.giftListSelect}
+                            onPress={()=>{navigation.navigate('GiftListDetail', {
+                                list: item
+                            })}}>
+                            <Text style={styles.giftListName}>{item.listName}</Text>
+                            <Text style={styles.giftListDate}><Ionicons name="calendar-outline" size={16} color="grey"/>  {item.dueDate}</Text>
+
+                        </TouchableOpacity> 
                         <TouchableOpacity 
                         onPress={()=>{deleteList(item)}}>
                             <Icon 
@@ -77,7 +82,7 @@ const GiftLists = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
                 );}}/>
-        </View>
+                </View>
     );
 }
 

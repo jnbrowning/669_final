@@ -91,6 +91,33 @@ const styles = StyleSheet.create({
     padding: '5%'
   },
 
+  //GIFT LISTS
+  giftListContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flex: 1,
+    paddingBottom: '3%'
+  },
+  giftListEmoji: {
+    fontSize: '60',
+    width: '25%',
+  },
+  giftListSelect: {
+    width: '65%',
+    height: '100%',
+    justifyContent: 'center'
+  },
+  giftListName: {
+    fontSize: '24',
+    paddingBottom: '2%'
+  },
+  giftListDate: {
+    fontStyle: 'italic',
+    fontSize: '12',
+    color: 'grey',
+  },
+
   //List Pages
   addButton: {
     alignItems: 'center',
@@ -200,6 +227,56 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     padding: '1%',
     marginBottom: '1%',
+  },
+
+//GIFTS
+  addPicture: {
+    width: 250,
+    height: 250,
+    resizeMode: 'contain',
+  },
+  cameraButton: {
+    flexDirection: 'row',
+    borderColor: 'grey',
+    borderRadius: '25%',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    padding: '1%',
+    marginTop: '5%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '40%',
+  },
+  cameraContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: '10%',
+    marginBottom: '10%'
+  }, 
+  camera: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+  },
+  takePicture: {
+    marginBottom: '7%',
+  },
+  cameraScreen: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: '10%',
+    backgroundColor: 'black'
+  },
+
+  detailPicture: {
+    height: 200,
+    width: 200,
+    borderRadius: '100%',
+    marginBottom: '3%'
   }
   });
 

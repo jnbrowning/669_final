@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Icon } from '@rneui/themed';
 import styles from '../styles';
 
@@ -9,7 +9,12 @@ const GiftDetail = (props) => {
 
     return(
         <View style={styles.container}>
+            <Image
+            style={styles.detailPicture}
+            source={gift.picture}
+            />
             <Text style={styles.header}>{gift.giftName}</Text>
+            
             <TouchableOpacity style={styles.editButton} 
                 onPress={
                 ()=>{

@@ -20,6 +20,8 @@ const actionTypes = {
   ADD_FRIEND: 'ADD_FRIEND',
   UPDATE_FRIEND: 'UPDATE_FRIEND',
   DELETE_FRIEND: 'DELETE_FRIEND',
+
+  PREVIEW_PICTURE: 'PREVIEW_PICTURE',
 }
 
 /////////
@@ -31,6 +33,8 @@ const initialState = {
   friendItems: [],
   userID: '',
   userName: '',
+  previewPicture: {},
+  updatePicture: false,
 }
 
 /////////
@@ -66,6 +70,7 @@ const addGift = (state, payload) => {
   let newGifts = giftItems.concat({
       giftName: newGift.giftName,
       price: newGift.price,
+      picture: newGift.picture,
       key: key
   });
   return {
@@ -78,6 +83,7 @@ const updateGift = (state, itemId, newGift) => {
   let updateGifts = {
       giftName: newGift.giftName,
       price: newGift.price,
+      picture: newGift.picture,
       key: itemId
   }
   let newGiftItems = giftItems.map(elem=>elem.key===itemId?updateGifts:elem);
@@ -95,6 +101,18 @@ const deleteGift = (state, key) => {
   }
 }
   
+//////////
+//CAMERA//
+//////////
+const previewPicture = (state, picture, updatePicture) => {
+  console.log(picture);
+  return {
+    ...state,
+    previewPicture: picture,
+    updatePicture: updatePicture,
+  }
+}
+
 //////////////
 //GIFT LISTS//
 //////////////
@@ -226,9 +244,11 @@ function rootReducer(state=initialState, action) {
     case actionTypes.DELETE_FRIEND:
       return deleteFriend(state, payload.key);
     
+    case actionTypes.PREVIEW_PICTURE:
+      return previewPicture(state, payload.picture, payload.updatePicture);
     default:
       return state;
   }
 }
 
-  export { rootReducer, actionTypes };
+  export { actionTypes, rootReducer };

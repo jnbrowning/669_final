@@ -82,6 +82,7 @@ const addGiftAndDispatch = async (action, dispatch) => {
     const newDocRef = await addDoc(coll, {
         giftName: newGift.giftName,
         price: newGift.price,
+        picture: newGift.picture,
     });
     payload.key = newDocRef.id;
     dispatch({
@@ -96,6 +97,7 @@ const updateGiftAndDispatch = async (action, dispatch) => {
     await updateDoc(giftRef, {
         giftName: newGift.giftName,
         price: newGift.price,
+        picture: newGift.picture,
     });
     dispatch(action);
 }
