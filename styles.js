@@ -161,7 +161,40 @@ const styles = StyleSheet.create({
   emojiBoard: {
     marginTop: '10%',
     flex: 0.8,
-  }
+  },
+  dropDown: {
+    width: '80%',
+    padding: '2%',
+    borderWidth: '1%',
+    borderColor: 'black',
+    borderStyle: 'solid',
+    backgroundColor: 'white',
+  },
+  dropDownLabel: {
+    flex: 0.8,
+    textAlign: 'left',
+    padding: '1%',
+    marginTop: '3%',
+    marginBottom: '1%'
+  },
+  dropDownPair: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flex: 1
+  },
+  dropDownText: {
+    fontSize: '14',
+    paddingLeft: '3%',
+    paddingTop: '1%',
+  },
+  cancelText: {
+    paddingTop: '1%',
+    textAlign: 'right'
+  },
+  emojiHeader: {
+    fontSize: '75',
+  },
   });
 
 export default styles;

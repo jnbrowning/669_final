@@ -51,6 +51,7 @@ const GiftLists = ({navigation}) => {
                     listName: '',
                     dueDate: '',
                     emoji: 'X',
+                    friendList: [],
                 }})}}>
                 <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>

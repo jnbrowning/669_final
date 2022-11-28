@@ -134,6 +134,7 @@ const addGiftListAndDispatch = async (action, dispatch) => {
         listName: newList.listName,
         dueDate: newList.dueDate,
         emoji: newList.emoji,
+        friendList: newList.friendList,
     });
     payload.key = newDocRef.id;
     dispatch({
@@ -149,6 +150,7 @@ const updateGiftListAndDispatch = async (action, dispatch) => {
         listName: newList.listName,
         dueDate: newList.dueDate,
         emoji: newList.emoji,
+        friendList: newFriend.friendList,
     });
     dispatch(action);
 }

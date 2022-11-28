@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import styles from '../styles';
 import { useDispatch, useSelector } from "react-redux";
 import { actionTypes } from '../data/Reducer';
@@ -14,6 +14,7 @@ const GiftListAdd = (props) => {
     const { list } = route.params;
 
     const userID = useSelector((state)=>state.userID);
+    const friends = useSelector((state)=>state.friendItems);
     const dispatch = useDispatch();
 
     [update, setUpdate] = useState(false);
@@ -23,6 +24,40 @@ const GiftListAdd = (props) => {
     [dueDate, setDueDate] = useState(list.dueDate);
     [visible, setVisible] = useState(false);
     [emojiVisible, setEmojiVisible] = useState(false);
+    [selectFriend, setSelectFriend] = useState('Select Friend');
+    [viewFriends, setViewFriends] = useState(false);
+    [friendList, setFriendList] = useState([]);
+
+    const inFriendList = (obj) => {
+        console.log(obj.key);
+
+        for (f of friendList){
+          if (f.key === obj.key) {
+            console.log(true);
+            return true;
+          }
+        }
+        console.log(false);
+        return false;
+      }
+  
+      const removeFriend = (obj) => {
+        const newFriends = friendList.filter(elem => elem.key!==obj.key);
+        setFriendList(newFriends);
+      };
+
+      const checkFriendList = (obj) => {
+        console.log(obj);
+        if (inFriendList(obj)) {
+
+          console.log('already in list');
+         
+        }
+        else {
+            const newFriendList = friendList.concat(obj);
+            setFriendList(newFriendList);
+            }
+    }
 
     const clearInputs = () => {
         const newList = {
@@ -43,6 +78,8 @@ const GiftListAdd = (props) => {
         else {
           setUpdate(true);
         }
+        const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
+        saveAndDispatch(loadFriends, dispatch);
       }, []);
 
     const addGiftList = () => {
@@ -89,7 +126,7 @@ const GiftListAdd = (props) => {
                 ><Text style={styles.headerButtonText}>{update ? 'Update' : 'Save'}</Text></TouchableOpacity>
             </View>
             <Text style={styles.header}>{update ? 'Update Gift List' : 'Add Gift List'}</Text>
-            <Text onPress={()=>{setEmojiVisible(true)}}>{emoji}</Text>
+            <Text onPress={()=>{setEmojiVisible(true)}} style={styles.emojiHeader}>{emoji}</Text>
             {emojiVisible ? 
             <View>
                 <TouchableOpacity
@@ -121,13 +158,63 @@ const GiftListAdd = (props) => {
                 </TouchableOpacity>
                 <Text style={styles.calendarText}>{dueDate}</Text>      
             </View>
-
             <DateTimePickerModal
                 isVisible={visible}
                 mode="date"
                 onConfirm={updateDate}
                 onCancel={()=>{setVisible(false)}}
-            />           
+            />    
+            <View style={styles.inputPair}>
+                <Text style={styles.dropDownLabel}>Add Friends to List: </Text>
+            </View>
+            {viewFriends ? 
+            <View style={styles.dropDown}>
+                <Text style = {styles.cancelText} onPress={()=>setViewFriends(false)}>close</Text>
+                <FlatList
+                data={friends}
+                renderItem={({item})=>{
+                    return (
+                        <View>
+                            {inFriendList(item) ? <View/> : 
+                            <View style={styles.dropDownPair}>
+                                <TouchableOpacity 
+                                    onPress={()=>{console.log('hi')}}>
+                                    <Ionicons name="add" size={18} color="black" onPress={()=>{checkFriendList(item)}}/>
+                                </TouchableOpacity> 
+                                
+                                <Text 
+                                style={styles.dropDownText}
+                                >{item.firstName} {item.lastName}</Text>
+                            </View>
+                }
+                        </View>
+                    );}}/>
+
+                    </View>
+            : <Text style={styles.dropDown} onPress={()=>{setViewFriends(true)}}>{selectFriend}</Text>}
+        
+        <View style={styles.inputPair}>
+            <Text style={styles.dropDownLabel}>Friends on Gift List: </Text>
+            <View>
+            <FlatList
+                data={friendList}
+                renderItem={({item})=>{
+                    return (
+                        <View style={styles.dropDownPair}>
+                            <TouchableOpacity 
+                                onPress={()=>{removeFriend(item)}}>
+                                <Ionicons name="md-trash-outline" size={18} color="black" />
+                            </TouchableOpacity>
+                            <Text 
+                            onPress={()=>{selectFriend(item)}}
+                            style={styles.dropDownText}
+                            >{item.firstName} {item.lastName}</Text>
+                        </View>
+                    );}}/>
+
+            </View>
+        </View>
+        
         </View>
     );
 }

@@ -9,7 +9,7 @@ const GiftListDetail = (props) => {
 
     return(
         <View style={styles.container}>
-            <Text>{list.emoji}</Text>
+            <Text style={styles.emojiHeader}>{list.emoji}</Text>
             <Text style={styles.header}>{list.listName}</Text>
             <TouchableOpacity style={styles.editButton} 
                 onPress={

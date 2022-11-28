@@ -111,6 +111,7 @@ const addGiftList = (state, payload) => {
       listName: newList.listName,
       dueDate: newList.dueDate,
       emoji: newList.emoji,
+      friendList: newList.friendList,
       key: key
   });
   return {
@@ -122,8 +123,9 @@ const updateGiftList = (state, itemId, newList) => {
   let { giftListItems } = state;
   let updateList = {
       listName: newList.listName,
-      dueDate: newList.listName,
+      dueDate: newList.dueDate,
       emoji: newList.emoji,
+      friendList: newFriend.friendList,
       key: itemId
   }
   let newListItems = giftListItems.map(elem=>elem.key===itemId?updateList:elem);
