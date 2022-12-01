@@ -117,7 +117,7 @@ const GiftAdd = (props) => {
                  : <View>
                  {update ? 
                     <Image
-                    style={styles.addPicture}
+                    style={styles.detailPicture}
                     source={gift.picture}
                     /> : <></>}
                 </View>

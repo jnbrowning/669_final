@@ -22,19 +22,37 @@ const actionTypes = {
   DELETE_FRIEND: 'DELETE_FRIEND',
 
   PREVIEW_PICTURE: 'PREVIEW_PICTURE',
+
+  CLEAR_DATA: 'CLEAR_DATA',
 }
 
 /////////
 //STATE//
 /////////
 const initialState = {
-  girfListItems: [],
+  giftListItems: [],
   giftItems: [],
   friendItems: [],
   userID: '',
   userName: '',
   previewPicture: {},
   updatePicture: false,
+}
+
+/////////
+//STATE//
+/////////
+const clearData = (state) => {
+  return {
+    ...state,
+    giftListItems: [],
+    giftItems: [],
+    friendItems: [],
+    userID: '',
+    userName: '',
+    previewPicture: {},
+    updatePicture: false,
+  }
 }
 
 /////////
@@ -177,6 +195,9 @@ const addFriend = (state, payload) => {
   let newFriends = friendItems.concat({
       firstName: newFriend.firstName,
       lastName: newFriend.lastName,
+      birthDate: newFriend.birthDate,
+      interests: newFriend.interests,
+      giftIdeas: newFriend.giftIdeas,
       key: key
   });
   return {
@@ -189,6 +210,9 @@ const updateFriend = (state, itemId, newFriend) => {
   let updateFriend = {
       firstName: newFriend.firstName,
       lastName: newFriend.lastName,
+      birthDate: newFriend.birthDate,
+      interests: newFriend.interests,
+      giftIdeas: newFriend.giftIdeas,
       key: itemId
   }
   let newFriends = friendItems.map(elem=>elem.key===itemId?updateFriend:elem);
@@ -246,8 +270,13 @@ function rootReducer(state=initialState, action) {
     
     case actionTypes.PREVIEW_PICTURE:
       return previewPicture(state, payload.picture, payload.updatePicture);
+
+    case actionTypes.CLEAR_DATA:
+      return clearData(state);
+    
     default:
       return state;
+
   }
 }
 

@@ -26,7 +26,6 @@ const Gifts = ({navigation}) => {
     useEffect(() => {
         const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
         saveAndDispatch(loadGifts, dispatch);
-        console.log('userID = ', userID)
     }, [ userID ]);
 
     return(

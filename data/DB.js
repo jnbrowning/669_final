@@ -191,6 +191,9 @@ const addFriendAndDispatch = async (action, dispatch) => {
     const newDocRef = await addDoc(coll, {
         firstName: newFriend.firstName,
         lastName: newFriend.lastName,
+        birthDate: newFriend.birthDate,
+        interests: newFriend.interests,
+        giftIdeas: newFriend.giftIdeas,
     });
     payload.key = newDocRef.id;
     dispatch({
@@ -205,6 +208,9 @@ const updateFriendAndDispatch = async (action, dispatch) => {
     await updateDoc(friendRef, {
         firstName: newFriend.firstName,
         lastName: newFriend.lastName,
+        birthDate: newFriend.birthDate,
+        interests: newFriend.interests,
+        giftIdeas: newFriend.giftIdeas,
     });
     dispatch(action);
 }

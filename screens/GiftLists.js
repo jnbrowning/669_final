@@ -8,6 +8,7 @@ import { saveAndDispatch } from '../data/DB';
 import { useEffect } from 'react';
 import { Icon } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
+import { rootReducer } from '../data/Reducer';
 
 const GiftLists = ({navigation}) => {
 
@@ -29,6 +30,10 @@ const GiftLists = ({navigation}) => {
     };
 
     useEffect(() => {
+        const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
+        saveAndDispatch(loadFriends, dispatch);
+        const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
+        saveAndDispatch(loadGifts, dispatch);
         const loadUser = { type: actionTypes.LOAD_USER, payload: {userId: userID} };
         saveAndDispatch(loadUser, dispatch);
         const loadGiftList = { type: actionTypes.LOAD_GIFT_LIST, payload: {userid: userID} };
@@ -40,7 +45,10 @@ const GiftLists = ({navigation}) => {
         <View style={styles.container}>
             <TouchableOpacity 
                 style={styles.signOutButton}
-                onPress={async () => {await signOut(getFBAuth());}}>
+                onPress={async () => {
+                    dispatch({ type: actionTypes.CLEAR_DATA });
+                    navigation.popToTop();
+                    await signOut(getFBAuth());}}>
                 <Text style={styles.signOutButtonText}>Sign Out</Text>
             </TouchableOpacity>
             <Text style={styles.header}>Gift Lists for {userName}</Text>

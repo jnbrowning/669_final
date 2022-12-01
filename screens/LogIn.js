@@ -109,19 +109,25 @@ function SignUp () {
             const userCred = await createUserWithEmailAndPassword(getFBAuth(), email, password);
             setEmail('');
             setPassword('');
-            await updateProfile(userCred.user, {displayName: displayName});
             const createUser = { type: actionTypes.CREATE_USER, payload: { 
                 userId: userCred.user.uid,
                 displayName: displayName
             }};
             setDisplayName('');
             await saveAndDispatch(createUser, dispatch);
-            await dispatch({
-              type: actionTypes.SET_USER,
-              payload: {
-                userid: userCred.user.uid,
+            try {
+              const currUser = await signInWithEmailAndPassword(getFBAuth(), email, password);
+              setEmail('');
+              setPassword('');
+              await dispatch({
+                type: actionTypes.SET_USER,
+                payload: {
+                  userid: currUser.user.uid,
+                }
+              })
+              } catch(error) {
+              Alert.alert("Sign Up Error", error.message,[{ text: "OK" }])
               }
-            })
           } catch(error) {
             Alert.alert("Sign Up Error", error.message,[{ text: "OK" }])
           }

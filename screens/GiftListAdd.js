@@ -8,9 +8,6 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Ionicons } from '@expo/vector-icons';
 import EmojiSelector from 'react-native-emoji-selector';
 
-import { FontAwesome } from '@expo/vector-icons'; 
-
-
 const GiftListAdd = (props) => {
 
     const { navigation, route } = props;
@@ -35,7 +32,7 @@ const GiftListAdd = (props) => {
         console.log(obj.key);
 
         for (f of friendList){
-          if (f.key === obj.key) {
+          if (f === obj.key) {
             console.log(true);
             return true;
           }
@@ -45,7 +42,7 @@ const GiftListAdd = (props) => {
       }
   
       const removeFriend = (obj) => {
-        const newFriends = friendList.filter(elem => elem.key!==obj.key);
+        const newFriends = friendList.filter(elem => elem!==obj.key);
         setFriendList(newFriends);
       };
 
@@ -57,7 +54,7 @@ const GiftListAdd = (props) => {
          
         }
         else {
-            const newFriendList = friendList.concat(obj);
+            const newFriendList = friendList.concat(obj.key);
             setFriendList(newFriendList);
             }
     }
@@ -204,18 +201,20 @@ const GiftListAdd = (props) => {
         <View style={styles.inputPair}>
             <View style={styles.friendList}>
                 <FlatList 
-                data={friendList}
+                data={friends}
                 renderItem={({item})=>{
                     return (
+                        <View>
+                        {inFriendList(item) ? 
                         <View style={styles.dropDownPair}>
                             <TouchableOpacity 
                                 onPress={()=>{removeFriend(item)}}>
                                 <Ionicons name="close" size={12} color="black" />
                             </TouchableOpacity>
                             <Text 
-                            onPress={()=>{selectFriend(item)}}
                             style={styles.dropDownText}
                             >{item.firstName} {item.lastName}</Text>
+                        </View> : <View/>}
                         </View>
                     );}}/>
             </View>  

@@ -27,9 +27,10 @@ const Friends = ({navigation}) => {
     };
 
     useEffect(() => {
+        const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
+        saveAndDispatch(loadGifts, dispatch);
         const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
         saveAndDispatch(loadFriends, dispatch);
-        console.log('userID = ', userID);
     }, []);
 
     return(
@@ -47,6 +48,9 @@ const Friends = ({navigation}) => {
                     key: -1,
                     firstName: '',
                     lastName: '',
+                    birthDate: '',
+                    interests: '',
+                    giftIdeas: [],
                 }})}}>
                 <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>

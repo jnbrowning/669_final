@@ -277,7 +277,12 @@ const styles = StyleSheet.create({
     width: 200,
     borderRadius: '100%',
     marginBottom: '3%'
-  }
+  },
+
+
+
   });
+
+
 
 export default styles;
