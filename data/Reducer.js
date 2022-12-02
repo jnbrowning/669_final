@@ -16,6 +16,11 @@ const actionTypes = {
   UPDATE_GIFT_LIST: 'UPDATE_GIFT_LIST',
   DELETE_GIFT_LIST: 'DELETE_GIFT_LIST',
 
+  LOAD_FRIEND_GIFT_LIST: 'LOAD_FRIEND_GIFT_LIST',
+  ADD_FRIEND_GIFT_LIST: 'ADD_FRIEND_GIFT_LIST',
+  UPDATE_FRIEND_GIFT_LIST: 'UPDATE_FRIEND_GIFT_LIST',
+  DELETE_FRIEND_GIFT_LIST: 'DELETE_FRIEND_GIFT_LIST',
+
   LOAD_FRIEND: 'LOAD_FRIEND',
   ADD_FRIEND: 'ADD_FRIEND',
   UPDATE_FRIEND: 'UPDATE_FRIEND',
@@ -37,6 +42,7 @@ const initialState = {
   userName: '',
   previewPicture: {},
   updatePicture: false,
+  friendGifts: [],
 }
 
 /////////
@@ -59,14 +65,12 @@ const clearData = (state) => {
 //USERS//
 /////////
 const loadUser = (state, displayName) => {
-  console.log(displayName);
   return {
     ...state,
     userName: displayName,
   }
 }
 const setUser = (state, userid) => {
-  console.log(userid);
   return {
       ...state,
       userID: userid,
@@ -123,7 +127,6 @@ const deleteGift = (state, key) => {
 //CAMERA//
 //////////
 const previewPicture = (state, picture, updatePicture) => {
-  console.log(picture);
   return {
     ...state,
     previewPicture: picture,
@@ -147,7 +150,6 @@ const addGiftList = (state, payload) => {
       listName: newList.listName,
       dueDate: newList.dueDate,
       emoji: newList.emoji,
-      friendList: newList.friendList,
       key: key
   });
   return {
@@ -161,7 +163,6 @@ const updateGiftList = (state, itemId, newList) => {
       listName: newList.listName,
       dueDate: newList.dueDate,
       emoji: newList.emoji,
-      friendList: newList.friendList,
       key: itemId
   }
   let newListItems = giftListItems.map(elem=>elem.key===itemId?updateList:elem);
@@ -179,11 +180,56 @@ const deleteGiftList = (state, key) => {
   }
 }
 
+///////////////////
+//GIFT FOR FRIEND//
+///////////////////
+const loadFriendGiftList = (state, newFriendGifts ) => {
+  return {
+    ...state,
+    friendGifts: newFriendGifts,
+  }
+}
+const addFriendGiftList = (state, payload) => {
+  const { newFriendGifts, key } = payload;
+  let { friendGifts } = state;
+  let newLists = friendGifts.concat({
+      firstName: newFriendGifts.firstName,
+      lastName: newFriendGifts.lastName,
+      gifts: newFriendGifts.gifts, 
+      key: key,
+  });
+  return {
+      ...state,
+      friendGifts: newLists
+  }
+}
+const updateFriendGiftList = (state, key, newFriendGifts) => {
+  let { friendGifts } = state;
+  let updateList = {
+    firstName: newFriendGifts.firstName,
+    lastName: newFriendGifts.lastName,
+    gifts: newFriendGifts.gifts, 
+    key: key,
+  }
+  let newListItems = friendGifts.map(elem=>elem.key===key?updateList:elem);
+  return {
+      ...state,
+      friendGifts: newListItems,
+  }
+}
+const deleteFriendGiftList = (state, key) => {
+  let { friendGifts } = state;
+  let newListItems = friendGifts.filter(elem=>elem.key!==key);
+  return{
+      ...state,
+      friendGifts: newListItems,
+  }
+}
+
 ///////////
 //FRIENDS//
 ///////////
 const loadFriends = (state, newFriends ) => {
-  console.log(newFriends);
   return {
     ...state,
     friendItems: newFriends,
@@ -258,6 +304,15 @@ function rootReducer(state=initialState, action) {
       return updateGiftList(state, payload.key, payload.newList);
     case actionTypes.DELETE_GIFT_LIST:
       return deleteGiftList(state, payload.key);
+
+    case actionTypes.LOAD_FRIEND_GIFT_LIST:
+      return loadFriendGiftList(state, payload.newFriendGifts);
+    case actionTypes.ADD_FRIEND_GIFT_LIST:
+      return addFriendGiftList(state, payload);
+    case actionTypes.UPDATE_FRIEND_GIFT_LIST:
+      return updateFriendGiftList(state, payload.key, payload.newFriendGifts);
+    case actionTypes.DELETE_FRIEND_GIFT_LIST:
+      return deleteFriendGiftList(state, payload.key);
 
     case actionTypes.LOAD_FRIEND:
       return loadFriends(state, payload.newFriends);

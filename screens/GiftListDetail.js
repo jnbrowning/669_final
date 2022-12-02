@@ -6,364 +6,240 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import Modal from "react-native-modal";
 import { actionTypes } from '../data/Reducer';
-import { saveAndDispatch } from '../data/DB';
-import { Ionicons } from '@expo/vector-icons'; 
-
+import { saveAndDispatch, subscribeToFriends } from '../data/DB';
+import { Ionicons } from '@expo/vector-icons';
+import GiftStatusBar from '../components/GiftStatusBar';
 
 const GiftListDetail = (props) => {
 
-    const friends = useSelector((state)=>state.friendItems);
-    const gifts = useSelector((state)=>state.giftItems);
-    const userID = useSelector((state)=>state.userID);
+  const friends = useSelector((state)=>state.friendItems);
+  const gifts = useSelector((state)=>state.giftItems);
+  const userID = useSelector((state)=>state.userID);
+  const friendGifts = useSelector((state)=>state.friendGifts);
 
-    const { navigation, route } = props;
-    const { list } = route.params;
-    const dispatch = useDispatch();
+  const { navigation, route } = props;
+  const { list } = route.params;
+  const dispatch = useDispatch();
 
-    [needToUpdate, setNeedToUpdate] = useState(false);
-    [overlayVisible, setOverlayVisible] = useState(false);
-    [updateVisible, setUpdateVisible] = useState(false);
-    [giftSelected, setGiftSelected] = useState(false);
-    [viewGifts, setViewGifts] = useState(false);
-    [editGifts, setEditGifts] = useState(false);
+  //overlay for adding or updating friend gifts
+  [overlayVisible, setOverlayVisible] = useState(false);
+  //updates overlay to show detail view of gift for add/update
+  [giftSelected, setGiftSelected] = useState(false);
+  //used to set friend when adding gift idea
+  [currentFriend, setCurrentFriend] = useState('');
+  //gift ideas to choose from for specific friend
+  [giftIdeas, setGiftIdeas] = useState([]);
+  //for overlay, whether user is updating or adding gift idea
+  [update, setUpdate] = useState(false);
 
-    [currentFriend, setCurrentFriend] = useState('');
-    [currentGift, setCurrentGift] = useState('');
-    [listOfGifts, setListOfGifts] = useState([]);
-
-    [giftName, setGiftName] = useState('');
-    [giftKey, setGiftKey] = useState('');
-    [giftIdeas, setGiftIdeas] = useState([]);
-    [friendList, setFriendList] = useState(list.friendList);
-
-    //For Friend Gift Text Inputs
-    [currentGiftName, setCurrentGiftName] = useState('');
-    [giftStatus, setGiftStatus] = useState(0);
-    [price, setPrice] = useState('');
-    [notes, setNotes] = useState('');
-    [giftKey, setGiftKey] = useState('');
-
-    const clearInputs = () => {
-      setCurrentFriend('');
-      setCurrentGift('');
-      setGiftStatus(0);
-      setPrice('');
-      setNotes('');
-      setGiftSelected(false);
-  }
+  //friend gift text inputs
+  [currentGiftName, setCurrentGiftName] = useState('');
+  [giftStatus, setGiftStatus] = useState(0);
+  [price, setPrice] = useState('');
+  [notes, setNotes] = useState('');
+  [giftKey, setGiftKey] = useState('');
+  [giftIndex, setIndex] = useState(0);
 
   useEffect(() => {
-    const loadGiftList = { type: actionTypes.LOAD_GIFT_LIST, payload: {userid: userID} };
-    saveAndDispatch(loadGiftList, dispatch);
-    }, []);
+    //load list of friends and gifts
+    const loadFriendGifts = { type: actionTypes.LOAD_FRIEND_GIFT_LIST, payload: {userid: userID, listid: list.key}}
+    saveAndDispatch(loadFriendGifts, dispatch);
+    //subscribe to updates on friend gifts to see live updates
+    subscribeToFriends(userID, list.key);
+  }, []);
 
-    const updateGiftList = (newFriends) => {
-      const newList = {
-        listName: list.listName,
-        dueDate: list.dueDate,
-        emoji: list.emoji,
-        friendList: friendList,
-    }
-    console.log(newList);
-      const updateAction = { type: actionTypes.UPDATE_GIFT_LIST, payload: { key: list.key, newList: newList, userid: userID }}
-      saveAndDispatch(updateAction, dispatch);
-      setNeedToUpdate(false);
-  }
-
-    const prepViewGifts = (obj) => {
-      for (f of friendList){
-        if (f.friend === obj) {
-          setListOfGifts(f.gifts);
-        }
-        setViewGifts(true);
-
-    }}
-
-    const updateFriendGift = () => {
-      setNeedToUpdate(true);
-      const newFriendGift = {
-        giftKey: giftKey,
-        giftName: currentGiftName,
-        status: giftStatus,
-        price: price,
-        notes: notes,
-      }
-      console.log(newFriendGift);
-      setCurrentGift('');
-      setCurrentGiftName('');
-      setGiftStatus(0);
-      setPrice('');
-      setNotes('');
-  
-      for (f of friendList){
-        if (f.friend === currentFriend) {
-          const newGifts = f.gifts.map(elem=>elem.giftKey===newFriendGift.giftKey?newFriendGift:elem);
-          console.log('new gifts ' + newGifts);
-          let updateFriend = {
-            firstName: f.firstName,
-            lastName: f.lastName,
-            friend: f.friend,
-            gifts: newGifts
-        }
-        let newGiftItems = friendList.map(elem=>elem.friend===f.friend?updateFriend:elem);
-        setFriendList(newGiftItems);
-        }
-      }
-      setUpdateVisible(false);
-    }
-
-  const addFriendGift = async () => {
-    setNeedToUpdate(true);
-    const newFriendGift = {
-      giftKey: giftKey,
-      giftName: currentGiftName,
-      status: giftStatus,
-      price: price,
-      notes: notes,
-    }
-    setCurrentGift('');
+  //reset inputs and close overlay after add or update gift idea
+  const clearInputs = () => {
     setCurrentGiftName('');
     setGiftStatus(0);
     setPrice('');
     setNotes('');
-    console.log(newFriendGift);
-    for (f of friendList){
-      if (f.friend === currentFriend) {
-        const newGifts = f.gifts.concat(newFriendGift);
+    setGiftKey('');
+    setIndex(0);
+    setOverlayVisible(false);
+    setGiftSelected(false);
+    setUpdate(false);
+  }
+
+  //add or update gift idea for friend
+  const addFriendGiftList = () => {
+    //create gift object
+    const newFriendGift = {
+      giftKey: giftKey,
+      giftName: currentGiftName,
+      giftStatus: giftStatus,
+      price: price,
+      notes: notes,
+      friendID: currentFriend,
+    }
+    for (f of friendGifts){
+      //find friend in friend list and update gifts
+      if (f.key === currentFriend) {
+        let newGifts;
+        //add gift
+        if(!update){newGifts = f.gifts.concat(newFriendGift);}
+        //update gift
+        else {
+          newGifts = f.gifts.slice();
+          newGifts[giftIndex] = newFriendGift;
+        }
+        //create updated friend object
         let updateFriend = {
           firstName: f.firstName,
           lastName: f.lastName,
-          friend: f.friend,
           gifts: newGifts
+        }
+        //update Firebase with new friend gift info
+        const updateAction = { type: actionTypes.UPDATE_FRIEND_GIFT_LIST, payload: { key: f.key, newFriendGifts: updateFriend, userid: userID, listid: list.key }}
+        saveAndDispatch(updateAction, dispatch);
       }
-      let newGiftItems = friendList.map(elem=>elem.friend===f.friend?updateFriend:elem);
-      await setFriendList(newGiftItems);
-      console.log(friendList);
-      }
+      //clear inputs for next entry
+      clearInputs();
     }
-    setOverlayVisible(false);
-    setGiftSelected(false);
+  }
+  
+  //get list of possible gift ideas for friend
+  const getGiftIdeaList = (obj) => {
+    for (f of friends){
+      if (f.key === obj) {setGiftIdeas(f.giftIdeas);}
+    }
   }
 
-  const editGift = (obj) => {
-    setEditGifts(true);
-    setGiftKey(obj.giftKey);
-    setGiftName(obj.giftName);
-    setNotes(obj.notes);
-    setPrice(obj.price);
-    setGiftStatus(obj.status);
+  //filter all gifts to view only those in friends possible gift ideas
+  const inGiftList = (obj) => {
+      for (g of giftIdeas){if (g === obj) {return true;}}
+      return false;
   }
 
-    const getGiftIdeaList = (obj) => {
-      for (f of friends){
-        if (f.key === obj) {
-          setGiftIdeas(f.giftIdeas);
-        }
-      }
-    }
+  //set values to add new gift for friend
+  const selectGift = (gift) => {
+    setGiftSelected(true);
+    setGiftKey(gift.key);
+    setCurrentGiftName(gift.giftName);
+    setPrice(gift.price);
+    setGiftStatus(0);
+    setNotes('');
+  }
 
-    const inGiftList = (obj) => {
-        for (g of giftIdeas){
-          if (g === obj) {
-            return true;
-          }
-        }
-        return false;
-    }
+  //set values to update gift idea for friend
+  const selectUpdateGift = (gift, index) => {
+    setUpdate(true);
+    setGiftSelected(true);
+    setOverlayVisible(true);
+    setCurrentFriend(gift.friendID);
+    setGiftKey(gift.giftKey);
+    setCurrentGiftName(gift.giftName);
+    setPrice(gift.price);
+    setGiftStatus(gift.giftStatus);
+    setNotes(gift.notes);
+    setIndex(index);
+  }
 
-    const selectGift = (gift) => {
-      setGiftSelected(true);
-      setCurrentGift(gift);
-      setGiftKey(gift.key);
-      setCurrentGiftName(gift.giftName);
-      setPrice(gift.price);
-    }
+  return(
+    <View style={styles.container}>
+      <Text style={styles.emojiHeader}>{list.emoji}</Text>
+      <Text style={styles.header}>{list.listName}</Text>
+      <TouchableOpacity style={styles.editButton} 
+      onPress={()=>{navigation.navigate('GiftListAdd', {list: list});}}>
+        <Text style={styles.editText}>Edit</Text>
+        <Icon 
+          style={styles.editText}
+          name="pencil"
+          type="font-awesome"
+          color='grey'
+          size={16}
+        />
+      </TouchableOpacity>
 
-    const selectUpdateGift = (gift) => {
-      console.log('select gift ' + {gift},);
-      setGiftKey(gift.giftKey);
-      setCurrentGiftName(gift.giftName);
-      setPrice(gift.price);
-      setGiftStatus(gift.status);
-      setNotes(gift.note);
-    }
+      <Text style={styles.detailText}>Due Date: {list.dueDate}</Text>
+      <View style={styles.giftListFriends}>
+        <FlatList
+        data={friendGifts}
+        renderItem={({item})=>{
+          return (
+            <View>
+              <View style={styles.friendGiftPair}>
+                <Text style={styles.friendName}>{item.firstName} {item.lastName}</Text>
+                <TouchableOpacity 
+                style={styles.addGift}
+                onPress={() => { 
+                  setCurrentFriend(item.key);
+                  setOverlayVisible(true);
+                  getGiftIdeaList(item.key)}}>
+                  <Feather name="gift" size={20} color="black"/>
+                  <Ionicons name="add" size={12} color="black" />
+                </TouchableOpacity>   
+              </View>
+              <FlatList
+                data={item.gifts}
+                renderItem={({item, index})=>{
+                  return (
+                    <TouchableOpacity 
+                    style={styles.giftItemDetail}
+                    onPress={()=>{selectUpdateGift(item, index);}}>
+                      <Text style={styles.giftItemText}>{item.giftName}</Text>
+                      <GiftStatusBar giftStatus={item.giftStatus} disabled={true} />
+                    </TouchableOpacity>);}}
+              />
+            </View>);}}
+        />
+      </View>
 
-    return(
-        <View style={styles.container}>
-            <Text style={styles.emojiHeader}>{list.emoji}</Text>
-            <Text style={styles.header}>{list.listName}</Text>
-            {needToUpdate ? <TouchableOpacity style={styles.editButton} 
-                onPress={
-                ()=>{
-                  updateGiftList();
-                }}>
-            <Text style={styles.editText}>UPDATE</Text>
-            <Icon 
-              style={styles.editText}
-              name="pencil"
-              type="font-awesome"
-              color='grey'
-              size={16}
-            />
-          </TouchableOpacity>
-            : <TouchableOpacity style={styles.editButton} 
-                onPress={
-                ()=>{
-                navigation.navigate('GiftListAdd', {
-                list: list
-                });}}>
-            <Text style={styles.editText}>Edit</Text>
-            <Icon 
-              style={styles.editText}
-              name="pencil"
-              type="font-awesome"
-              color='grey'
-              size={16}
-            />
-          </TouchableOpacity> }
-            <Text style={styles.detailText}>Due Date: {list.dueDate}</Text>
-            
-            <View  style={styles.giftListFriends}>
-            <FlatList
-            data={friendList}
-            renderItem={({item})=>{
-                return (
-                    <View>
-                      <View style={styles.friendGiftPair}>
-                      <Text style={styles.friendName}>{item.firstName} {item.lastName}</Text>
-                      <TouchableOpacity 
-                      style={styles.addGift}
-                      onPress={() => {  setCurrentFriend(item.friend);
-                                                          setOverlayVisible(true);
-                                                          getGiftIdeaList(item.friend)}}>
-                            <Feather name="gift" size={20} color="black"/>
-                            <Ionicons name="add" size={12} color="black" />
-                        </TouchableOpacity>  
-                        
-                        </View>
-                        <FlatList 
-                          data={item.gifts}
-                          renderItem={({item})=>{
-                              return (
-                                  <TouchableOpacity style={styles.giftItemDetail}
-                                  onPress={()=>{
-                                    selectUpdateGift(item);
-                                    setUpdateVisible(true)}}
-                                  >
-                          <Text style={styles.giftItemText}>{item.giftName}</Text>
-                          <View style={styles.statusBundle}>
-                          <View style={styles.activeStatusButton}><Text style={styles.statusText}>Idea</Text></View>
-                          <View style={(item.status > 0) ? styles.activeStatusButton: styles.statusButton}><Text style={styles.statusText}>Bought</Text></View>
-                          <View style={(item.status > 1) ? styles.activeStatusButton: styles.statusButton}><Text style={styles.statusText}>Wrapped</Text></View>
-                          <View style={(item.status > 2) ? styles.activeStatusButton: styles.statusButton}><Text style={styles.statusText}>Shipped</Text></View>
-                          <View style={(item.status > 3) ? styles.activeStatusButton: styles.statusButton}><Text style={styles.statusText}>Done</Text></View>
-                          </View>
-                          </TouchableOpacity>
-                          
-                          );}}/>
-                    </View>
-                );}}/>
+      <Modal 
+      isVisible={overlayVisible}
+      onBackdropPress={()=>{setOverlayVisible(false); setGiftSelected(false)}}
+      backdropOpacity={0.2}
+      style={styles.overlay}>
+        <View style={styles.overlayBox}>
+          {giftSelected ? 
+          <View>
+            <View style={styles.inputPair}>
+              <Text style={styles.inputLabel}>Gift: </Text>
+              <TextInput
+              style={styles.inputText}
+              value={currentGiftName}
+              onChangeText={(text)=>setCurrentGiftName(text)}/>
             </View>
-            <Modal isVisible={overlayVisible}
-                  onBackdropPress={()=>{setOverlayVisible(false); setGiftSelected(false)}}
-                  backdropOpacity={0.2}
-                  style={styles.overlay}>
-              <View style={styles.overlayBox}>
-              {giftSelected ? 
+            <View style={styles.inputPair}>
+            <Text>Price: </Text>
+            <TextInput
+              style={styles.inputText}
+              value={price}
+              onChangeText={(text)=>setPrice(text)}/>
+            </View>
+            <Text>Status:</Text>
+            <GiftStatusBar giftStatus={giftStatus} disabled={false}/>
+            <View style={styles.inputPair}>
+              <Text style={styles.inputLabel}>Note: </Text>
+              <TextInput
+                style={styles.inputText}
+                value={notes}
+                onChangeText={(text)=>setNotes(text)}/>
+            </View>
+            <TouchableOpacity
+            onPress={addFriendGiftList}>
+              <Text>{update ? 'Update Gift' : 'Add Gift'}</Text>
+            </TouchableOpacity>
+          </View> 
+          : 
+          <FlatList 
+          data={gifts}
+          renderItem={({item})=>{
+            return (
               <View>
-                <View style={styles.inputPair}>
-                  <Text style={styles.inputLabel}>Gift: </Text>
-                  <TextInput
-                  style={styles.inputText}
-                  value={currentGiftName}
-                  onChangeText={(text)=>setCurrentGiftName(text)}/>
+                {inGiftList(item.key) ?  
+                <View style={styles.dropDownPair}>
+                  <Text onPress={()=>selectGift(item)} style={styles.dropDownText}>{item.giftName}</Text> 
                 </View>
-                <View style={styles.inputPair}>
-                <Text>Price: </Text>
-                <TextInput
-                  style={styles.inputText}
-                  value={price}
-                  onChangeText={(text)=>setPrice(text)}/>
-                </View>
-                <Text>Status:</Text>
-                <View style={styles.statusBundle}>
-                <TouchableOpacity style={styles.activeStatusButton} onPress={()=>setGiftStatus(0)}><Text>Idea</Text></TouchableOpacity>
-                <TouchableOpacity style={(giftStatus > 0) ? styles.activeStatusButton: styles.statusButton} onPress={()=>setGiftStatus(1)}><Text>Bought</Text></TouchableOpacity>
-                <TouchableOpacity style={(giftStatus > 1) ? styles.activeStatusButton: styles.statusButton} onPress={()=>setGiftStatus(2)}><Text>Wrapped</Text></TouchableOpacity>
-                <TouchableOpacity style={(giftStatus > 2) ? styles.activeStatusButton: styles.statusButton} onPress={()=>setGiftStatus(3)}><Text>Shipped</Text></TouchableOpacity>
-                <TouchableOpacity style={(giftStatus > 3) ? styles.activeStatusButton: styles.statusButton} onPress={()=>setGiftStatus(4)}><Text>Done</Text></TouchableOpacity>
-                </View>
-                <View style={styles.inputPair}>
-                <Text style={styles.inputLabel}>Note: </Text>
-                <TextInput
-                  style={styles.inputText}
-                  value={notes}
-                  onChangeText={(text)=>setNotes(text)}/>
-                </View>
-                <TouchableOpacity
-                  onPress={addFriendGift}
-                ><Text>Add Gift</Text></TouchableOpacity>
+                : 
+                <View/>}
               </View> 
-              : 
-              <FlatList 
-                data={gifts}
-                renderItem={({item})=>{
-                    return (
-                        <View>
-                            {inGiftList(item.key) ?  
-                            <View style={styles.dropDownPair}>
-                            <Text 
-                            onPress={()=>selectGift(item)}
-                            style={styles.dropDownText}
-                            >{item.giftName}</Text> 
-                            </View>: <View/> }
-                        </View> 
-                    );}}/>}
-                    </View>
-            </Modal>
-
-            <Modal isVisible={updateVisible}
-                  onBackdropPress={()=>{setUpdateVisible(false)}}
-                  backdropOpacity={0.2}
-                  style={styles.overlay}>
-              <View style={styles.overlayBox}>
-                <View style={styles.inputPair}>
-                  <Text style={styles.inputLabel}>Gift: </Text>
-                  <TextInput
-                  style={styles.inputText}
-                  value={currentGiftName}
-                  onChangeText={(text)=>setCurrentGiftName(text)}/>
-                </View>
-                <View style={styles.inputPair}>
-                <Text>Price: </Text>
-                <TextInput
-                  style={styles.inputText}
-                  value={price}
-                  onChangeText={(text)=>setPrice(text)}/>
-                </View>
-                <Text>Status:</Text>
-                <View style={styles.statusBundle}>
-                <TouchableOpacity style={styles.activeStatusButton} onPress={()=>setGiftStatus(0)}><Text>Idea</Text></TouchableOpacity>
-                <TouchableOpacity style={(giftStatus > 0) ? styles.activeStatusButton: styles.statusButton} onPress={()=>setGiftStatus(1)}><Text>Bought</Text></TouchableOpacity>
-                <TouchableOpacity style={(giftStatus > 1) ? styles.activeStatusButton: styles.statusButton} onPress={()=>setGiftStatus(2)}><Text>Wrapped</Text></TouchableOpacity>
-                <TouchableOpacity style={(giftStatus > 2) ? styles.activeStatusButton: styles.statusButton} onPress={()=>setGiftStatus(3)}><Text>Shipped</Text></TouchableOpacity>
-                <TouchableOpacity style={(giftStatus > 3) ? styles.activeStatusButton: styles.statusButton} onPress={()=>setGiftStatus(4)}><Text>Done</Text></TouchableOpacity>
-                </View>
-                <View style={styles.inputPair}>
-                <Text style={styles.inputLabel}>Note: </Text>
-                <TextInput
-                  style={styles.inputText}
-                  value={notes}
-                  onChangeText={(text)=>setNotes(text)}/>
-                </View>
-                <TouchableOpacity
-                  onPress={()=>updateFriendGift()}
-                ><Text>Update Gift</Text></TouchableOpacity>
-              </View> 
-            </Modal>
- 
+            );}}
+          />}
         </View>
-    );
+      </Modal>
+    </View>
+  );
 }
 
 export default GiftListDetail;

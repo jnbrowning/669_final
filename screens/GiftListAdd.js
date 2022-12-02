@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native'
 import styles from '../styles';
 import { useDispatch, useSelector } from "react-redux";
 import { actionTypes } from '../data/Reducer';
-import { saveAndDispatch } from '../data/DB';
+import { saveAndDispatch, subscribeToFriends } from '../data/DB';
 import { useState, useEffect } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Ionicons } from '@expo/vector-icons';
@@ -15,6 +15,7 @@ const GiftListAdd = (props) => {
 
     const userID = useSelector((state)=>state.userID);
     const friends = useSelector((state)=>state.friendItems);
+    const friendGifts = useSelector((state)=>state.friendGifts);
     const dispatch = useDispatch();
 
     [update, setUpdate] = useState(false);
@@ -26,29 +27,15 @@ const GiftListAdd = (props) => {
     [emojiVisible, setEmojiVisible] = useState(false);
     [selectFriend, setSelectFriend] = useState('Select Friend');
     [viewFriends, setViewFriends] = useState(false);
-    [friendList, setFriendList] = useState(list.friendList);
 
     const inFriendList = (obj) => {
-        for (f of friendList){
-          if (f.friend === obj.key) {
-            console.log(true);
+        for (f of friendGifts){
+          if (f.key === obj.key) {
             return true;
           }
         }
-        console.log(false);
         return false;
       }
-  
-      const removeFriend = (obj) => {
-        const newFriends = friendList.filter(elem => elem.friend!==obj.key);
-        setFriendList(newFriends);
-      };
-
-      const checkFriendList = (obj) => {
-        const newFriendList = friendList.concat({friend: obj.key, firstName: obj.firstName, lastName: obj.lastName, gifts: []});
-        setFriendList(newFriendList);
-        
-    }
 
     const clearInputs = () => {
         const newList = {
@@ -73,6 +60,9 @@ const GiftListAdd = (props) => {
         }
         const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
         saveAndDispatch(loadFriends, dispatch);
+        const loadFriendGifts = { type: actionTypes.LOAD_FRIEND_GIFT_LIST, payload: {userid: userID, listid: list.key}}
+        saveAndDispatch(loadFriendGifts, dispatch);
+        subscribeToFriends(userID, list.key);
       }, []);
 
     const addGiftList = () => {
@@ -82,12 +72,34 @@ const GiftListAdd = (props) => {
         navigation.navigate('GiftList');
     }
 
+    const addFriendGiftList = (friend) => {
+        let newFriendGift = {
+            firstName: friend.firstName, 
+            lastName: friend.lastName, 
+            gifts: []
+        }
+        const addAction = { type: actionTypes.ADD_FRIEND_GIFT_LIST, payload: { newFriendGifts: newFriendGift, key: friend.key, userid: userID, listid: list.key }};
+        saveAndDispatch(addAction, dispatch);
+
+    }
+
+    const deleteFriendGiftList = (item) => {
+        action = {
+            type: actionTypes.DELETE_FRIEND_GIFT_LIST, 
+            payload: {
+                key: item.key,
+                userid: userID,
+                listid: list.key,
+            }
+        }
+        saveAndDispatch(action, dispatch);
+    };
+
     const updateGiftList = () => {
         const newGiftList = clearInputs();
         const updateAction = { type: actionTypes.UPDATE_GIFT_LIST, payload: { key: list.key, newList: newGiftList, userid: userID }}
         navigation.navigate('GiftList');
         saveAndDispatch(updateAction, dispatch);
-
     }
 
     const updateDate = (date) => {
@@ -97,7 +109,6 @@ const GiftListAdd = (props) => {
                 year: "numeric",
                 })
         setDueDate(newDate); 
-        console.log(dueDate);
         setVisible(false);
     }
 
@@ -171,9 +182,8 @@ const GiftListAdd = (props) => {
                         <View>
                             {inFriendList(item) ? <View/> : 
                             <View style={styles.dropDownPair}>
-                                <TouchableOpacity 
-                                    onPress={()=>{console.log('hi')}}>
-                                    <Ionicons name="add" size={18} color="black" onPress={()=>{checkFriendList(item)}}/>
+                                <TouchableOpacity>
+                                    <Ionicons name="add" size={18} color="black" onPress={()=>{addFriendGiftList(item)}}/>
                                 </TouchableOpacity> 
                                 
                                 <Text 
@@ -200,7 +210,7 @@ const GiftListAdd = (props) => {
                         {inFriendList(item) ? 
                         <View style={styles.dropDownPair}>
                             <TouchableOpacity 
-                                onPress={()=>{removeFriend(item)}}>
+                                onPress={()=>{deleteFriendGiftList(item)}}>
                                 <Ionicons name="close" size={12} color="black" />
                             </TouchableOpacity>
                             <Text 
