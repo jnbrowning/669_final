@@ -21,6 +21,7 @@
     "@rneui/themed": "^4.0.0-rc.7",
     "deprecated-react-native-prop-types": "^2.3.0",
     "expo": "~47.0.6",
+    "expo-camera": "~13.1.0",
     "expo-font": "~11.0.1",
     "expo-status-bar": "~1.4.2",
     "firebase": "^9.6.11",
@@ -29,11 +30,11 @@
     "react-native-date-picker": "^4.2.6",
     "react-native-dropdown-picker": "^5.4.3",
     "react-native-emoji-selector": "^0.2.0",
-    "react-native-keyboard-aware-scroll-view": "^0.9.5",
-    "react-native-modal-datetime-picker": "^14.0.0",
-    "react-redux": "^8.0.5",
     "react-native-gesture-handler": "~2.8.0",
-    "expo-camera": "~13.1.0"
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-modal": "^13.0.1",
+    "react-native-modal-datetime-picker": "^14.0.0",
+    "react-redux": "^8.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

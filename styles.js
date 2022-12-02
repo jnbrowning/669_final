@@ -279,7 +279,65 @@ const styles = StyleSheet.create({
     marginBottom: '3%'
   },
 
-
+  overlay: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    margin: 0,
+  },
+  overlayBox: {
+    flex: 0.4,
+    backgroundColor: 'white',
+    width: '100%',
+    alignItems: 'flex-start',
+    padding: '7% 3% 5% 5%'
+  },
+  statusBundle: {
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: 'red',
+    width: '100%',
+  },
+  statusButton: {
+    backgroundColor: '#CFF5E7',
+    flex: 0.2,
+  },
+  activeStatusButton: {
+    backgroundColor: '#59C1BD',
+    flex: 0.2,
+  },
+  giftListFriends: {
+    width: '90%'
+  },
+  friendName: {
+    fontSize: '22',
+  },
+  addGift: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  friendGiftPair: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#A4BE7B',
+    borderTopRightRadius: '20%',
+    padding: '1%',
+    paddingLeft: '2%',
+    marginTop: '1%',
+    alignItems: 'center',
+  },
+  giftItemDetail: {
+    paddingLeft: '2%',
+    paddingTop: '1%',
+    paddingBottom: '2%'
+  },
+  giftItemText: {
+    paddingBottom: '1%',
+    fontSize: '18',
+  },
+  statusText: {
+    textAlign: 'center',
+    padding: '2%',
+  },
 
   });
 

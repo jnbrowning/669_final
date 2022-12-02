@@ -14,6 +14,7 @@ const GIFT_LIST_COLLNAME = 'giftLists';
 const FRIEND_COLLNAME = 'friends';
 const GIFT_COLLNAME = 'gifts';
 const USER_COLLNAME = 'users';
+const FRIEND_GIFT_COLLNAME = 'friendGifts';
 
 const getFBApp = () => {
     if (!firebaseApp) {
@@ -164,6 +165,45 @@ const deleteGiftListAndDispatch = async (action, dispatch) => {
     dispatch(action);
 }
 
+///////////////
+//FRIEND GIFT//
+///////////////
+const loadFriendGiftsAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const {userid, listid } = payload;
+    const querySnap = await getDocs(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME, listid, FRIEND_GIFT_COLLNAME));
+    let newFriendGifts = [];
+    querySnap.forEach(docSnap=>{
+        let newFriendGift = docSnap.data();
+        newFriendGift.key = docSnap.id;
+        newFriendGifts.push(newFriendGift);
+    });
+    let newAction = {
+        ...action,
+        payload: { newFriendGifts },
+    }
+    dispatch(newAction);
+}
+const addFriendGiftAndDispatch = async (action, dispatch) => {
+    const { payload } = action;
+    const { newFriendGift , userid, listid } = payload;
+    console.log(newFriendGift);
+    const coll = collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME, listid, FRIEND_GIFT_COLLNAME);
+    const newDocRef = await addDoc(coll, {
+        giftKey: newFriendGift.giftKey,
+        friendKey: newFriendGift.friendKey,
+        status: newFriendGift.status,
+        price: newFriendGift.price,
+        notes: newFriendGift.notes,
+    });
+    payload.key = newDocRef.id;
+    dispatch({
+        ...action,
+        payload: payload,
+    });
+}
+
+
 ///////////
 //FRIENDS//
 ///////////
@@ -177,7 +217,6 @@ const loadFriendAndDispatch = async (action, dispatch) => {
         newFriend.key = docSnap.id;
         newFriends.push(newFriend);
     });
-    console.log(newFriends);
     let newAction = {
         ...action,
         payload: { newFriends },
@@ -259,6 +298,13 @@ const saveAndDispatch = async(action, dispatch) => {
             return;
         case actionTypes.DELETE_GIFT_LIST: 
             deleteGiftListAndDispatch(action, dispatch);
+            return;
+
+        case actionTypes.LOAD_FRIEND_GIFT:
+            loadFriendGiftsAndDispatch(action, dispatch);
+            return;
+        case actionTypes.ADD_FRIEND_GIFT:
+            addFriendGiftAndDispatch(action, dispatch);
             return;
         
         case actionTypes.LOAD_FRIEND:

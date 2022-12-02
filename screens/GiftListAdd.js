@@ -29,10 +29,8 @@ const GiftListAdd = (props) => {
     [friendList, setFriendList] = useState(list.friendList);
 
     const inFriendList = (obj) => {
-        console.log(obj.key);
-
         for (f of friendList){
-          if (f === obj.key) {
+          if (f.friend === obj.key) {
             console.log(true);
             return true;
           }
@@ -42,21 +40,14 @@ const GiftListAdd = (props) => {
       }
   
       const removeFriend = (obj) => {
-        const newFriends = friendList.filter(elem => elem!==obj.key);
+        const newFriends = friendList.filter(elem => elem.friend!==obj.key);
         setFriendList(newFriends);
       };
 
       const checkFriendList = (obj) => {
-        console.log(obj);
-        if (inFriendList(obj)) {
-
-          console.log('already in list');
-         
-        }
-        else {
-            const newFriendList = friendList.concat(obj.key);
-            setFriendList(newFriendList);
-            }
+        const newFriendList = friendList.concat({friend: obj.key, firstName: obj.firstName, lastName: obj.lastName, gifts: []});
+        setFriendList(newFriendList);
+        
     }
 
     const clearInputs = () => {
@@ -87,8 +78,8 @@ const GiftListAdd = (props) => {
     const addGiftList = () => {
         const newGiftList = clearInputs();
         const addAction = { type: actionTypes.ADD_GIFT_LIST, payload: { newList: newGiftList, userid: userID }};
-        navigation.navigate('GiftList');
         saveAndDispatch(addAction, dispatch);
+        navigation.navigate('GiftList');
     }
 
     const updateGiftList = () => {
@@ -96,6 +87,7 @@ const GiftListAdd = (props) => {
         const updateAction = { type: actionTypes.UPDATE_GIFT_LIST, payload: { key: list.key, newList: newGiftList, userid: userID }}
         navigation.navigate('GiftList');
         saveAndDispatch(updateAction, dispatch);
+
     }
 
     const updateDate = (date) => {

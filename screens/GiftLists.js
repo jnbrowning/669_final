@@ -16,7 +16,6 @@ const GiftLists = ({navigation}) => {
     const userID = useSelector((state)=>state.userID);
     const giftLists = useSelector((state)=>state.giftListItems);
     const dispatch = useDispatch();
-    const newDate = new Date();
 
     const deleteList = (item) => {
         action = {
