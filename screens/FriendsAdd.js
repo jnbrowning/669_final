@@ -19,16 +19,13 @@ const FriendsAdd = (props) => {
     const inGiftList = (obj) => {
         for (g of giftIdeas){
           if (g === obj) {
-            console.log(true);
             return true;
           }
         }
-        console.log(false);
         return false;
     }
 
     const checkGiftList = (obj) => {
-        console.log(obj);
         if (inGiftList(obj)) {
             console.log('already in gift list');
         }
@@ -50,7 +47,6 @@ const FriendsAdd = (props) => {
             year: "numeric",
             })
     setBirthDate(newDate); 
-    console.log(birthDate);
     setCalendarVisible(false);
     }
 
@@ -91,7 +87,6 @@ const FriendsAdd = (props) => {
 
     const addFriend = () => {
         const newFriend = clearInputs();
-        console.log(newFriend)
         const addAction = { type: actionTypes.ADD_FRIEND, payload: { newFriend: newFriend, userid: userID }};
         saveAndDispatch(addAction, dispatch);
         navigation.navigate('Friends');
@@ -100,8 +95,8 @@ const FriendsAdd = (props) => {
     const updateFriend = () => {
         const newFriends = clearInputs();
         const updateAction = { type: actionTypes.UPDATE_FRIEND, payload: { key: friend.key, newFriend: newFriends, userid: userID }}
-        navigation.navigate('Friends');
         saveAndDispatch(updateAction, dispatch);
+        navigation.navigate('Friends');
     }
 
     return(

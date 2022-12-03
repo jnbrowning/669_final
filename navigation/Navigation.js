@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 
 const GiftListScreenNavigator = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='GiftList' screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="GiftList"
                 component={GiftLists}
@@ -40,7 +40,7 @@ export {GiftListScreenNavigator};
 
 const FriendScreenNavigator = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='Friends' screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="Friends"
                 component={Friends}
@@ -61,7 +61,7 @@ export {FriendScreenNavigator};
 
 const GiftScreenNavigator = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='Gifts' screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="Gifts"
                 component={Gifts}

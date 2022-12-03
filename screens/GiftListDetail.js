@@ -98,6 +98,26 @@ const GiftListDetail = (props) => {
     }
   }
   
+  deleteGift = () => {
+    for (f of friendGifts){
+      //find friend in friend list and update gifts
+      if (f.key === currentFriend) {
+        newGifts = f.gifts.slice();
+        newGifts.splice(giftIndex, 1);
+        let updateFriend = {
+          firstName: f.firstName,
+          lastName: f.lastName,
+          gifts: newGifts
+        }
+        console.log(updateFriend.gifts)
+        //update Firebase with new friend gift info
+        const updateAction = { type: actionTypes.UPDATE_FRIEND_GIFT_LIST, payload: { key: f.key, newFriendGifts: updateFriend, userid: userID, listid: list.key }}
+        saveAndDispatch(updateAction, dispatch);
+        }
+      //clear inputs for next entry
+      clearInputs();
+  }}
+
   //get list of possible gift ideas for friend
   const getGiftIdeaList = (obj) => {
     for (f of friends){
@@ -193,6 +213,14 @@ const GiftListDetail = (props) => {
         <View style={styles.overlayBox}>
           {giftSelected ? 
           <View>
+            <TouchableOpacity 
+              onPress={deleteGift}>
+                  <Icon 
+                      name="trash"
+                      type="font-awesome"
+                      size={18}
+                  />
+            </TouchableOpacity>
             <View style={styles.inputPair}>
               <Text style={styles.inputLabel}>Gift: </Text>
               <TextInput

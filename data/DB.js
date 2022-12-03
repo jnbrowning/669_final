@@ -38,7 +38,6 @@ const getFBAuth = () => { return getAuth(getFBApp());}
 const createUser = async(action, dispatch) => {
     const { payload } = action;
     const { userId, displayName } = payload;
-    console.log(displayName);
     await setDoc(doc(collection(db, USER_COLLNAME), userId), {
       displayName: displayName,
     });
@@ -46,11 +45,9 @@ const createUser = async(action, dispatch) => {
 const loadUser = async(action, dispatch) => {
     const { payload } = action;
     const { userId } = payload;
-    console.log(userId);
     const userInfo = await getDoc(doc(collection(db, USER_COLLNAME), userId));
     const user = userInfo.data();
     const displayName = user.displayName;
-    console.log(displayName);
     let newAction = {
         ...action, 
         payload: { displayName }
@@ -108,6 +105,24 @@ const deleteGiftAndDispatch = async (action, dispatch) => {
     const { key, userid } = payload;
     const docToDelete = doc(collection(db, USER_COLLNAME, userid, GIFT_COLLNAME), key);
     await deleteDoc(docToDelete);
+    //Delete gift from friend gift ideas
+    const querySnap = await getDocs(collection(db, USER_COLLNAME, userid, FRIEND_COLLNAME));
+    querySnap.forEach(docSnap=>{
+        let newFriend = docSnap.data();
+        const friendID = docSnap.id;
+        if (newFriend.giftIdeas.includes(key)) {
+            let newListItems = newFriend.giftIdeas.filter(elem=>elem!==key);
+            const updateFriend = {
+                firstName: newFriend.firstName,
+                lastName: newFriend.lastName,
+                birthDate: newFriend.birthDate,
+                interests: newFriend.interests,
+                giftIdeas: newListItems,
+            }
+            const updateAction = { type: actionTypes.UPDATE_FRIEND, payload: { key: friendID, newFriend: updateFriend, userid: userid }}
+            saveAndDispatch(updateAction, dispatch);
+        }
+    });
     dispatch(action);
 }
 
@@ -187,7 +202,6 @@ const loadFriendGiftListAndDispatch = async (action, dispatch) => {
 const addFriendGiftListAndDispatch = async (action, dispatch) => {
     const { payload } = action;
     const { newFriendGifts , key, userid, listid } = payload;
-    console.log('db ' + newFriendGifts);
     const giftRef = doc(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME, listid, FRIEND_GIFT_COLLNAME), key);
     await setDoc(giftRef, {
         firstName: newFriendGifts.firstName,
@@ -203,7 +217,6 @@ const addFriendGiftListAndDispatch = async (action, dispatch) => {
 const updateFriendGiftListAndDispatch = async (action, dispatch) => {
     const { payload } = action;
     const { newFriendGifts, key, userid, listid } = payload;
-    console.log(key);
     const giftRef = doc(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME, listid, FRIEND_GIFT_COLLNAME), key);
     await updateDoc(giftRef, {
         firstName: newFriendGifts.firstName,
@@ -268,6 +281,31 @@ const updateFriendAndDispatch = async (action, dispatch) => {
         interests: newFriend.interests,
         giftIdeas: newFriend.giftIdeas,
     });
+    //Update friend in friend list for gift lists
+    const querySnap = await getDocs(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME));
+    let giftListIDs = [];
+    querySnap.forEach(docSnap=>{
+        const giftListID = docSnap.id;
+        giftListIDs.push(giftListID);
+        console.log(giftListID);
+    });
+    for (g of giftListIDs) {
+        const friendListRef = await getDocs(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME, g, FRIEND_GIFT_COLLNAME));
+            friendListRef.forEach(docSnap=>{
+                const updateFriend = docSnap.data();
+                const friendID = docSnap.id;
+                console.log(friendID + ' ' + newFriend.firstName + ' ' + key)
+                if (friendID===key) {
+                    const newFriendGifts = {
+                        firstName: newFriend.firstName,
+                        lastName: newFriend.lastName,
+                        gifts: updateFriend.gifts,
+                    }
+                    const updateAction = { type: actionTypes.UPDATE_FRIEND_GIFT_LIST, payload: { key: friendID, newFriendGifts: newFriendGifts, userid: userid, listid: g }}
+                    saveAndDispatch(updateAction, dispatch);
+                }
+            })
+    }
     dispatch(action);
 }
 const deleteFriendAndDispatch = async (action, dispatch) => {
@@ -276,6 +314,24 @@ const deleteFriendAndDispatch = async (action, dispatch) => {
     const docToDelete = doc(collection(db, USER_COLLNAME, userid, FRIEND_COLLNAME), key);
     await deleteDoc(docToDelete);
     dispatch(action);
+    //Delete friend in friend list for gift lists
+    const querySnap = await getDocs(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME));
+    let giftListIDs = [];
+    querySnap.forEach(docSnap=>{
+        const giftListID = docSnap.id;
+        giftListIDs.push(giftListID);
+        console.log(giftListID);
+    });
+    for (g of giftListIDs) {
+        const friendListRef = await getDocs(collection(db, USER_COLLNAME, userid, GIFT_LIST_COLLNAME, g, FRIEND_GIFT_COLLNAME));
+            friendListRef.forEach(docSnap=>{
+                const friendID = docSnap.id;
+                if (friendID===key) {
+                    action = { type: actionTypes.DELETE_FRIEND_GIFT_LIST, payload: { key: friendID, userid: userid, listid: g,}}
+                    saveAndDispatch(action, dispatch);
+                }
+            })
+    }
 }
 
 const subscribeToFriends = (userid, listid) => {

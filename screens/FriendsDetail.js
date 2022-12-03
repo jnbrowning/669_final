@@ -12,14 +12,11 @@ const FriendsDetail = (props) => {
 
 
     const inGiftList = (obj) => {
-        console.log(friend.giftIdeas)
         for (g of friend.giftIdeas){
           if (g === obj) {
-            console.log(true);
             return true;
           }
         }
-        console.log(false);
         return false;
     }
 
@@ -30,7 +27,6 @@ const FriendsDetail = (props) => {
             <TouchableOpacity style={styles.editButton} 
                 onPress={
                 ()=>{
-                    console.log(friend);
                     navigation.navigate('FriendsAdd', {
                 friend: friend
                 });}}>

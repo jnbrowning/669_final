@@ -42,12 +42,10 @@ const GiftListAdd = (props) => {
             listName: listName,
             dueDate: dueDate,
             emoji: emoji,
-            friendList: friendList,
         }
         setListName('');
         setDueDate('');
         setEmoji('X');
-        setFriendList([]);
         return newList;
     }
 
