@@ -1,12 +1,12 @@
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import styles from '../styles';
-import { getFBAuth } from '../data/DB';
-import { signOut } from 'firebase/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useEffect } from 'react';
-import { Icon } from '@rneui/themed';
+import Header from '../components/Header';
+import BigAddButton from '../components/BigAddButton';
+import FriendItem from '../components/FriendItem';
 
 const Friends = ({navigation}) => {
 
@@ -15,17 +15,6 @@ const Friends = ({navigation}) => {
     const userName = useSelector((state)=>state.userName);
     const dispatch = useDispatch();
 
-    const deleteFriend = (item) => {
-        action = {
-            type: actionTypes.DELETE_FRIEND, 
-            payload: {
-                key: item.key,
-                userid: userID,
-            }
-        }
-        saveAndDispatch(action, dispatch);
-    };
-
     useEffect(() => {
         const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
         saveAndDispatch(loadGifts, dispatch);
@@ -33,49 +22,30 @@ const Friends = ({navigation}) => {
         saveAndDispatch(loadFriends, dispatch);
     }, []);
 
+    const addFriend = () => {
+        return navigation.navigate('FriendsAdd', {
+            friend: {
+                key: -1,
+                firstName: '',
+                lastName: '',
+                birthDate: '',
+                interests: '',
+                giftIdeas: [],
+        }})
+    }
+
     return(
         <View style={styles.container}>
-            <TouchableOpacity 
-                style={styles.signOutButton}
-                onPress={async () => {await signOut(getFBAuth());}}>
-                <Text style={styles.signOutButtonText}>Sign Out</Text>
-            </TouchableOpacity>
-            <Text style={styles.header}>{userName}'s Friends</Text>
-            <View style={styles.addButton}>
-            <TouchableOpacity 
-            onPress={()=>{navigation.navigate('FriendsAdd', {
-                friend: {
-                    key: -1,
-                    firstName: '',
-                    lastName: '',
-                    birthDate: '',
-                    interests: '',
-                    giftIdeas: [],
-                }})}}>
-                <Text style={styles.addButtonText}>+</Text>
-            </TouchableOpacity>
+            <Header headerTitle={'Friends'} navigation={navigation}/>
+            <View style={styles.listContainer}>
+                <FlatList
+                data={friends}
+                renderItem={({item})=>{
+                    return (
+                        <FriendItem friendItem={item} navigation={navigation}/>
+                    );}}/>
             </View>
-            <FlatList
-            data={friends}
-            renderItem={({item})=>{
-                return (
-                    <View style={styles.item}>
-                        <Text 
-                        style={styles.itemText}
-                        onPress={()=>{navigation.navigate('FriendsDetail', {
-                            friend: item,
-                        })}}
-                        >{item.firstName} {item.lastName}</Text>
-                        <TouchableOpacity 
-                        onPress={()=>{deleteFriend(item)}}>
-                            <Icon 
-                                name="trash"
-                                type="font-awesome"
-                                size={18}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                );}}/>
+            <BigAddButton addFunction={addFriend}/>
         </View>
     );
 }

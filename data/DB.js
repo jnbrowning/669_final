@@ -82,6 +82,8 @@ const addGiftAndDispatch = async (action, dispatch) => {
         giftName: newGift.giftName,
         price: newGift.price,
         picture: newGift.picture,
+        from: newGift.from,
+        detail: newGift.detail,
     });
     payload.key = newDocRef.id;
     dispatch({
@@ -97,6 +99,8 @@ const updateGiftAndDispatch = async (action, dispatch) => {
         giftName: newGift.giftName,
         price: newGift.price,
         picture: newGift.picture,
+        from: newGift.from,
+        detail: newGift.detail,
     });
     dispatch(action);
 }
@@ -159,6 +163,7 @@ const addGiftListAndDispatch = async (action, dispatch) => {
         ...action,
         payload: payload,
     });
+    return newDocRef.id;
 }
 const updateGiftListAndDispatch = async (action, dispatch) => {
     const { payload } = action;
@@ -384,8 +389,8 @@ const saveAndDispatch = async(action, dispatch) => {
             loadGiftListAndDispatch(action, dispatch);
             return;
         case actionTypes.ADD_GIFT_LIST:
-            addGiftListAndDispatch(action, dispatch);
-            return;
+            const giftID = addGiftListAndDispatch(action, dispatch);
+            return giftID;
         case actionTypes.UPDATE_GIFT_LIST:
             updateGiftListAndDispatch(action, dispatch);
             return;

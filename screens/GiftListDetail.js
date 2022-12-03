@@ -9,6 +9,7 @@ import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch, subscribeToFriends } from '../data/DB';
 import { Ionicons } from '@expo/vector-icons';
 import GiftStatusBar from '../components/GiftStatusBar';
+import BackButton from '../components/BackButton';
 
 const GiftListDetail = (props) => {
 
@@ -46,6 +47,7 @@ const GiftListDetail = (props) => {
     saveAndDispatch(loadFriendGifts, dispatch);
     //subscribe to updates on friend gifts to see live updates
     subscribeToFriends(userID, list.key);
+    console.log(list);
   }, []);
 
   //reset inputs and close overlay after add or update gift idea
@@ -157,21 +159,24 @@ const GiftListDetail = (props) => {
 
   return(
     <View style={styles.container}>
-      <Text style={styles.emojiHeader}>{list.emoji}</Text>
-      <Text style={styles.header}>{list.listName}</Text>
-      <TouchableOpacity style={styles.editButton} 
-      onPress={()=>{navigation.navigate('GiftListAdd', {list: list});}}>
-        <Text style={styles.editText}>Edit</Text>
-        <Icon 
-          style={styles.editText}
-          name="pencil"
-          type="font-awesome"
-          color='grey'
-          size={16}
-        />
+      <View style={styles.detailHeaderContainer}>
+        <BackButton navigation={navigation}/>
+        <Text style={styles.emojiHeader}>{list.emoji}</Text>
+        <Text style={styles.detailHeader}>{list.listName}</Text>
+        <Text style={styles.detailText}>Due Date: {list.dueDate}</Text>
+        <TouchableOpacity style={styles.editButton} 
+        onPress={()=>{navigation.navigate('GiftListAdd', {list: list});}}>
+          <Text style={styles.editText}>Edit</Text>
+          <Icon 
+            style={styles.editText}
+            name="pencil"
+            type="font-awesome"
+            color='grey'
+            size={16}
+          />
       </TouchableOpacity>
-
-      <Text style={styles.detailText}>Due Date: {list.dueDate}</Text>
+      </View>
+      
       <View style={styles.giftListFriends}>
         <FlatList
         data={friendGifts}
@@ -204,52 +209,60 @@ const GiftListDetail = (props) => {
             </View>);}}
         />
       </View>
-
       <Modal 
       isVisible={overlayVisible}
       onBackdropPress={()=>{setOverlayVisible(false); setGiftSelected(false)}}
       backdropOpacity={0.2}
       style={styles.overlay}>
-        <View style={styles.overlayBox}>
+              
+        <View style={styles.overlayExpandBox}>
+        
           {giftSelected ? 
-          <View>
-            <TouchableOpacity 
-              onPress={deleteGift}>
-                  <Icon 
-                      name="trash"
-                      type="font-awesome"
-                      size={18}
-                  />
-            </TouchableOpacity>
-            <View style={styles.inputPair}>
-              <Text style={styles.inputLabel}>Gift: </Text>
+          <View style={styles.giftStatusOverlay}>
+            <View style={styles.giftStatusPair}>
+              <Text style={styles.giftStatusLabel}>Gift: </Text>
               <TextInput
-              style={styles.inputText}
+              style={styles.giftStatusInput}
               value={currentGiftName}
               onChangeText={(text)=>setCurrentGiftName(text)}/>
             </View>
-            <View style={styles.inputPair}>
-            <Text>Price: </Text>
+            <View style={styles.giftStatusPair}>
+            <Text style={styles.giftStatusLabel}>Price: </Text>
             <TextInput
-              style={styles.inputText}
+              style={styles.giftStatusInput}
               value={price}
               onChangeText={(text)=>setPrice(text)}/>
             </View>
-            <Text>Status:</Text>
-            <GiftStatusBar giftStatus={giftStatus} disabled={false}/>
-            <View style={styles.inputPair}>
-              <Text style={styles.inputLabel}>Note: </Text>
-              <TextInput
-                style={styles.inputText}
-                value={notes}
-                onChangeText={(text)=>setNotes(text)}/>
+            <View style={styles.giftStatusPair}>
+              <Text style={styles.giftStatusLabel}>Status:</Text>
             </View>
-            <TouchableOpacity
-            onPress={addFriendGiftList}>
-              <Text>{update ? 'Update Gift' : 'Add Gift'}</Text>
+            <View style={styles.overlayStatus}>
+            <GiftStatusBar giftStatus={giftStatus} disabled={false}/>
+            </View>
+            <View style={styles.giftStatusPair}>
+              <Text style={styles.giftStatusLabel}>Note: </Text>
+              <TextInput
+              style={styles.giftStatusInput}
+                value={notes}
+                onChangeText={(text)=>setNotes(text)}
+                />
+            </View>
+            <View style={styles.statusButtonPair}>
+            <TouchableOpacity 
+              style={styles.statusDelete}
+              onPress={deleteGift}>
+              <Ionicons name="trash-outline" size={30} color="grey" />
             </TouchableOpacity>
+            <TouchableOpacity
+            style={styles.statusSave}
+            onPress={addFriendGiftList}>
+              <Text>{update ? 'Save' : 'Add Gift'}</Text>
+            </TouchableOpacity>
+            </View>
           </View> 
           : 
+          <View>
+          <Text>Gift Ideas: </Text>
           <FlatList 
           data={gifts}
           renderItem={({item})=>{
@@ -263,8 +276,12 @@ const GiftListDetail = (props) => {
                 <View/>}
               </View> 
             );}}
-          />}
+          />
+          </View>
+          }
+          
         </View>
+        
       </Modal>
     </View>
   );

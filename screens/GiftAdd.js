@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react';
 import { Icon } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons'; 
 
-
 const GiftAdd = (props) => {
 
     const userID = useSelector((state)=>state.userID);
@@ -32,6 +31,8 @@ const GiftAdd = (props) => {
 
     [giftName, setGiftName] = useState(gift.giftName);
     [price, setPrice] = useState(gift.price);
+    [from, setFrom] = useState(gift.from);
+    [detail, setDetail] = useState(gift.detail);
 
     const clearInputs = () => {
         let updatePicture;
@@ -45,6 +46,8 @@ const GiftAdd = (props) => {
             giftName: giftName,
             price: price,
             picture: updatePicture,
+            from: from,
+            detail: detail,
         }
         setGiftName('');
         setPrice('');
@@ -145,6 +148,21 @@ const GiftAdd = (props) => {
                 onChangeText={(text)=>setPrice(text)}/>
             </View>
 
+            <View style={styles.inputPair}>
+                <Text style={styles.inputLabel}>From:</Text>
+                <TextInput
+                    style={styles.inputText}
+                    value={from}
+                    onChangeText={(text)=>setFrom(text)}/>
+            </View>
+
+            <View style={styles.inputPair}>
+                <Text style={styles.inputLabel}>Description:</Text>
+                <TextInput
+                    style={styles.inputText}
+                    value={detail}
+                    onChangeText={(text)=>setDetail(text)}/>
+            </View>
         </View>
     );
 }

@@ -93,6 +93,8 @@ const addGift = (state, payload) => {
       giftName: newGift.giftName,
       price: newGift.price,
       picture: newGift.picture,
+      from: newGift.from,
+      detail: newGift.detail,
       key: key
   });
   return {
@@ -106,6 +108,8 @@ const updateGift = (state, itemId, newGift) => {
       giftName: newGift.giftName,
       price: newGift.price,
       picture: newGift.picture,
+      from: newGift.from,
+      detail: newGift.detail,
       key: itemId
   }
   let newGiftItems = giftItems.map(elem=>elem.key===itemId?updateGifts:elem);

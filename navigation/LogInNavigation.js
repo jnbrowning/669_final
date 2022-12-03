@@ -15,8 +15,8 @@ const LogInNavigation = () => {
             <Stack.Screen screenOptions={{ headerShow: false }}
                 name="User"
                 component={TabNavigator}
-        />
-        </Stack.Navigator>
+                />
+            </Stack.Navigator>
     )
 }
 export default LogInNavigation ;

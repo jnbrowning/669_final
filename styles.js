@@ -1,32 +1,66 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+
+  //GENERAL STYLES
   container: {
     flex: 1,
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: '15%',
+  },
+  listContainer: {
+    width: '100%',
+    marginTop: '2%',
+  },
+  itemText: {
+    padding: '2%',
+    fontSize: '20',
+    textAlign: 'center',
+  },
+
+  //HEADER (GIFT LIST, GIFTS, FRIENDS)
+  headerContainer: {
+    paddingTop: '10%',
+    backgroundColor: '#863A6F',
+    width: '100%',
   },
   header: {
-    fontSize: '30',
-    marginBottom: '3%',
+    fontSize: '26',
+    marginBottom: '4%',
+    textAlign: 'center',
+    color: 'white'
+  },
+  signOutButton: {
+    alignItems: 'flex-end',
+    paddingTop: '1%',
+    width: '95%',
+  },
+
+  //BIG ADD BUTTON (GIFT LIST, GIFTS, FRIENDS)
+  addButtonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: '5%'
+  },
+  mainAddButton: {
+    backgroundColor: '#863A6F',
+    width: 65,
+    height: 65,
+    borderRadius: '100%',
+    justifyContent: 'center',
+  },
+  mainAddButtonText: {
+    alignSelf: 'center',
+    padding: '10%',
+    color: 'white'
   },
 
   //LOGIN SCREEN
   appName: {
     fontSize: '40',
     paddingBottom: '12%',
-    marginTop: '20%',
-  },
-  logInContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1,
-    width: '100%',
-  },
-  logInInfoContainer: {
-    width: '100%',
+    marginTop: '30%',
   },
   logInText: {
     fontSize: '16',
@@ -61,16 +95,21 @@ const styles = StyleSheet.create({
     fontSize: '16',
     color: 'white'
   },
-  signOutButton: {
-    alignItems: 'flex-end',
-    width: '85%',
+
+  //DETAIL PAGES
+  detailHeaderContainer: {
+    paddingTop: '14%',
+    width: '100%',
+    alignItems: 'center'
+  },
+  detailHeader:  {
+    fontSize: '24',
+    margin: '1%',
+  },
+  detailText: {
+    fontSize: '14',
     marginBottom: '2%'
   },
-  signOutButtonText: {
-    color: '#863A6F'
-  },
-
-  //Detail Pages
   editButton: {
     flexDirection: 'row',
     borderColor: 'grey',
@@ -79,38 +118,202 @@ const styles = StyleSheet.create({
     borderWidth: '1px',
     padding: '1%',
     margin: '1%',
+    marginBottom: '3%',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     width: '20%',
   },
   editText: {
-      color: 'grey',
+    color: 'grey',
   },
-  detailText: {
+  detailLabel: {
+    fontSize: '18',
+    textAlign: 'left',
+    width: '100%',
+    marginLeft: '20%',
+    paddingBottom: '2%',
+    marginTop: '2%',
+  },
+  detailInfo: {
+    fontSize: '14',
+    textAlign: 'left',
+    width: '100%',
+    marginLeft: '20%',
+    paddingBottom: '5%',
+  },
+  backButton: {
+    flexDirection: 'row',
+    width: '100%',
+    marginLeft: '7%',
+  },
+
+  //FRIEND DETAIL PAGE
+  friendDetailHeaderContainer: {
+    paddingTop: '17%',
+    width: '100%',
+    alignItems: 'center'
+  },
+  friendDetailHeader:  {
+    fontSize: '28',
+    margin: '2%',
+    marginTop: '5%',
+    paddingBottom: '1%'
+  },
+  friendDetailText: {
     fontSize: '16',
-    padding: '5%'
+    paddingBottom: '5%'
   },
+  giftIdeaItem: {
+    padding: '1%'
+  },
+  giftIdeaText: {
+    paddingTop: '2%',
+    paddingLeft: '5%',
+  },
+
+  //GIFT DETAIL PAGE
+  giftHeaderText: {
+    fontSize: '24',
+    paddingBottom: '3%',
+  },
+  detailPicture: {
+    height: 200,
+    width: 200,
+    borderRadius: '100%',
+    marginBottom: '5%',
+    marginTop: '5%',
+  },
+
+
+  //ADD EDIT PAGES 
+  inputPair: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  headInputText: {
+    flex: 0.65,
+    marginLeft: '1%',
+    paddingLeft: '1%',
+    marginRight: '2%',
+    borderColor: 'grey',
+    borderStyle: 'solid',
+    borderBottomWidth: '1%',
+    marginTop: '3%',
+    fontSize: 18,
+  },
+  inputText: {
+    flex: 0.65,
+    marginLeft: '1%',
+    paddingLeft: '1%',
+    marginRight: '2%',
+    borderColor: 'grey',
+    borderStyle: 'solid',
+    borderBottomWidth: '1%',
+    marginTop: '3%'
+  },
+  wideInputText: {
+    width: '81%',
+    marginLeft: '3%',
+    marginRight: '2%',
+    borderColor: 'grey',
+    borderStyle: 'solid',
+    borderBottomWidth: '1%',
+    paddingBottom: '1%',
+    marginTop: '1%'
+  },
+  inputLabel: {
+    flex: 0.25,
+    padding: '1%',
+    marginTop: '3%',
+    fontSize: '16',
+    marginLeft: '7%',
+  },  
+  wideInputLabel: {
+    flex: 0.46,
+    padding: '1%',
+    marginTop: '3%',
+    fontSize: '16',
+    marginLeft: '7%',
+    paddingBottom: '3%',
+  },
+  calendar: {
+    paddingTop: '3.5%',
+    paddingLeft: '3%',
+  },
+  calendarText: {
+    flex: 0.6,
+    marginLeft: '3%',
+    marginRight: '2%',
+    borderColor: 'grey',
+    borderStyle: 'solid',
+    borderBottomWidth: '1%',
+    marginTop: '4%',
+    fontSize: 15,
+  },
+  addFriendIcon: {
+    justifyContent: 'center',
+    padding: '1%',
+  },
+
+
+  friendListText: {
+    paddingTop: '1%',
+    paddingBottom: '2%',
+    paddingLeft: '2%',
+  },
+
+  cancelIcon: {
+    paddingBottom: '2%',
+  },
+
+  confirmButton: {
+    backgroundColor: '#863A6F',
+    padding: '3%',
+    paddingLeft: '5%',
+    paddingRight: '5%',
+    borderRadius: '100%',
+  },
+  confirmText: {
+    color: 'white'
+  },
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
 
   //GIFT LISTS
   giftListContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     flex: 1,
-    paddingBottom: '3%'
+    paddingBottom: '3%',
+    paddingTop: '3%',
+    paddingLeft: '7%',
+    margin: 0,
   },
   giftListEmoji: {
-    fontSize: '60',
-    width: '25%',
+    fontSize: '40',
+    paddingRight: '5%',
   },
   giftListSelect: {
-    width: '65%',
     height: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   giftListName: {
-    fontSize: '24',
-    paddingBottom: '2%'
+    fontSize: '20',
+    paddingBottom: '1%'
   },
   giftListDate: {
     fontStyle: 'italic',
@@ -141,61 +344,27 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   headerButtonText: {
-    color: '#060bfd',
+    color: '#863A6F',
     paddingRight: '5%'
   },
-  inputPair: {
-    flexDirection: 'row',
-  },
-  inputLabel: {
-    flex: 0.25,
-    textAlign: 'right',
-    padding: '1%',
-    marginTop: '3%',
-  },
-  inputText: {
-    flex: 0.65,
-    marginLeft: '3%',
-    marginRight: '2%',
-    borderColor: 'grey',
-    borderStyle: 'solid',
-    borderBottomWidth: '1%',
-    marginTop: '3%'
-  },
+
   item: {
     flexDirection: 'row',
     padding: '1%',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  itemText: {
-    padding: '1%',
-    fontSize: '18'
-  },
-  calendar: {
-    paddingTop: '2%',
-    paddingLeft: '3%',
-  },
-  calendarText: {
-    flex: 0.6,
-    marginLeft: '3%',
-    marginRight: '2%',
-    borderColor: 'grey',
-    borderStyle: 'solid',
-    borderBottomWidth: '1%',
-    marginTop: '3.5%'
-  },
-  emojiBoard: {
-    marginTop: '10%',
-    flex: 0.8,
-  },
+
+//DROP DOWN
   dropDown: {
-    width: '80%',
+    width: '85%',
     padding: '2%',
     borderWidth: '1%',
+    marginTop: '1%',
     borderColor: 'black',
     borderStyle: 'solid',
     backgroundColor: 'white',
+    flex: 0.5,
   },
   dropDownLabel: {
     flex: 0.8,
@@ -204,29 +373,24 @@ const styles = StyleSheet.create({
     marginTop: '3%',
     marginBottom: '1%'
   },
-  dropDownPair: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1
-  },
+
   dropDownText: {
     fontSize: '14',
     paddingLeft: '3%',
     paddingTop: '1%',
   },
   cancelText: {
-    paddingTop: '1%',
     textAlign: 'right'
   },
   emojiHeader: {
     fontSize: '75',
   },
   friendList: {
-    flex: 0.8,
+    width: '90%',
     textAlign: 'left',
     padding: '1%',
     marginBottom: '1%',
+    marginLeft: '5%',
   },
 
 //GIFTS
@@ -272,20 +436,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'black'
   },
 
-  detailPicture: {
-    height: 200,
-    width: 200,
-    borderRadius: '100%',
-    marginBottom: '3%'
-  },
 
   overlay: {
     justifyContent: 'flex-end',
     alignItems: 'center',
     margin: 0,
+
   },
   overlayBox: {
     flex: 0.4,
+    backgroundColor: 'white',
+    width: '100%',
+    alignItems: 'flex-start',
+    padding: '7% 3% 5% 5%'
+  },
+  overlayExpandBox: {
+    flex: 0.75,
     backgroundColor: 'white',
     width: '100%',
     alignItems: 'flex-start',
@@ -300,10 +466,12 @@ const styles = StyleSheet.create({
   statusButton: {
     backgroundColor: '#CFF5E7',
     flex: 0.2,
+    justifyContent: 'center'
   },
   activeStatusButton: {
     backgroundColor: '#59C1BD',
     flex: 0.2,
+    justifyContent: 'center'
   },
   giftListFriends: {
     width: '90%'
@@ -339,6 +507,91 @@ const styles = StyleSheet.create({
     padding: '2%',
   },
 
+  //EMOJI BOARD
+  emojiMenu: {
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: '100%'
+  },
+  emojiBoard: {
+    marginTop: '3%',
+    flex: 0.9,
+  },
+  emojiPair: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  emojiButton: {
+    padding: '2%',
+    borderRadius: '25%',
+    width: '20%',
+    margin: '2%',
+    alignItems: 'center',
+  },
+
+  giftStatusOverlay: {
+    alignItems: 'flex-start',
+  },
+  giftStatusPair: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: '100%',
+    alignItems: 'flex-end',
+    marginTop: '3%',
+    marginBottom: '2%',
+  },
+  giftStatusLabel: {
+    fontSize: 16,
+    flex: 0.2,
+    textAlign: 'right',
+    paddingRight: '3%',
+    paddingBottom: '1%',
+  },
+  giftStatusInput: {
+    flex: 0.75,
+    fontSize: 15,
+    marginRight: '2%',
+    borderColor: 'grey',
+    borderStyle: 'solid',
+    borderBottomWidth: '1%',
+    paddingBottom: '1%',
+  },
+  overlayStatus: {
+    height: '15%',
+  },
+  statusButtonPair: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'center',
+    margin: '5%',
+  },
+  statusDelete: {
+    padding: '5%'
+  },
+  statusSave: {
+    padding: '5%'
+  },
+
+  deleteSwipe: {
+    backgroundColor: 'red',
+    margin: 0,
+    justifyContent: 'center',
+    width: 75,
+    height: '100%',
+    alignItems: 'center',
+  },
+  deleteSwipeText: {
+    color: 'white',
+  },
+
+
+
+  screenStyle: {
+    backgroundColor: 'pink'
+  },
   });
 
 

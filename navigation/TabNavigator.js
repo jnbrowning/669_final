@@ -9,7 +9,8 @@ function TabNavigator() {
         <Tab.Navigator initialRouteName='ListTab' screenOptions={{headerShown: false}}>
           <Tab.Screen 
             name='ListTab' 
-            component={GiftListScreenNavigator} 
+            component={GiftListScreenNavigator}
+            
             options={{
                tabBarLabel: 'Gift Lists',
                 tabBarIcon: ({ color, size }) => (

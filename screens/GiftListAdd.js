@@ -5,8 +5,9 @@ import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch, subscribeToFriends } from '../data/DB';
 import { useState, useEffect } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import EmojiSelector from 'react-native-emoji-selector';
+import BackButton from '../components/BackButton';
 
 const GiftListAdd = (props) => {
 
@@ -17,8 +18,6 @@ const GiftListAdd = (props) => {
     const friends = useSelector((state)=>state.friendItems);
     const friendGifts = useSelector((state)=>state.friendGifts);
     const dispatch = useDispatch();
-
-    [update, setUpdate] = useState(false);
 
     [emoji, setEmoji] = useState(list.emoji);
     [listName, setListName] = useState(list.listName);
@@ -50,25 +49,12 @@ const GiftListAdd = (props) => {
     }
 
     useEffect(() => {
-        if (list.key === -1) {
-          setUpdate(false);
-        }
-        else {
-          setUpdate(true);
-        }
         const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
         saveAndDispatch(loadFriends, dispatch);
         const loadFriendGifts = { type: actionTypes.LOAD_FRIEND_GIFT_LIST, payload: {userid: userID, listid: list.key}}
         saveAndDispatch(loadFriendGifts, dispatch);
         subscribeToFriends(userID, list.key);
       }, []);
-
-    const addGiftList = () => {
-        const newGiftList = clearInputs();
-        const addAction = { type: actionTypes.ADD_GIFT_LIST, payload: { newList: newGiftList, userid: userID }};
-        saveAndDispatch(addAction, dispatch);
-        navigation.navigate('GiftList');
-    }
 
     const addFriendGiftList = (friend) => {
         let newFriendGift = {
@@ -78,7 +64,6 @@ const GiftListAdd = (props) => {
         }
         const addAction = { type: actionTypes.ADD_FRIEND_GIFT_LIST, payload: { newFriendGifts: newFriendGift, key: friend.key, userid: userID, listid: list.key }};
         saveAndDispatch(addAction, dispatch);
-
     }
 
     const deleteFriendGiftList = (item) => {
@@ -112,54 +97,43 @@ const GiftListAdd = (props) => {
 
     return(
         <View style={styles.container}>
-            <View style={styles.headerButton}>
-                <TouchableOpacity
-                    onPress={()=>{navigation.navigate('GiftList');}}
-                    >
-                    <Text style={styles.headerButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={()=>{
-                    if (!update) {
-                        addGiftList();
-                    } else {
-                        updateGiftList();
-                    }
-                    }}
-                ><Text style={styles.headerButtonText}>{update ? 'Update' : 'Save'}</Text></TouchableOpacity>
+            <View style={styles.detailHeaderContainer}>
+                <BackButton navigation={navigation}/>
             </View>
-            <Text style={styles.header}>{update ? 'Update Gift List' : 'Add Gift List'}</Text>
             <Text onPress={()=>{setEmojiVisible(true)}} style={styles.emojiHeader}>{emoji}</Text>
             {emojiVisible ? 
-            <View>
-                <TouchableOpacity
-                    onPress={()=>{
-                    setEmoji('X');
-                    setEmojiVisible(false);
-                }}
-                ><Text>Cancel</Text></TouchableOpacity>
+            <View style={styles.emojiMenu}>
+                <View style={styles.emojiPair}>
                 <TouchableOpacity
                     onPress={()=>{
                     setEmojiVisible(false);
                 }}
-                ><Text>Confirm</Text></TouchableOpacity>
-            <EmojiSelector onEmojiSelected={emoji => setEmoji(emoji)} style={styles.emojiBoard}/>
+                style={styles.emojiButton}
+                ><Ionicons name="close-outline" size={40} color="red" /></TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=>{
+                    setEmojiVisible(false);
+                }}
+                style={styles.emojiButton}
+                ><Ionicons name="checkmark" size={40} color='green' /></TouchableOpacity>
+                </View>
+                <EmojiSelector onEmojiSelected={emoji => setEmoji(emoji)} style={styles.emojiBoard}/>
             </View>
             : <View/>} 
             <View style={styles.inputPair}>
                 <Text style={styles.inputLabel}>List Name:</Text>
                 <TextInput
-                    style={styles.inputText}
+                    style={styles.headInputText}
                     value={listName}
                     onChangeText={(text)=>setListName(text)}/>
             </View>
             <View style={styles.inputPair}>
-            <Text style={styles.inputLabel}>Due Date:</Text>
-            <TouchableOpacity 
-                onPress={()=>setVisible(true)}>
-                    <Ionicons name="calendar-outline" size={24} color="red" style={styles.calendar}/>
-                </TouchableOpacity>
-                <Text style={styles.calendarText}>{dueDate}</Text>      
+                <Text style={styles.inputLabel}>Due Date:</Text>
+                <TouchableOpacity 
+                    onPress={()=>setVisible(true)}>
+                        <Ionicons name="calendar-outline" size={20} color="#863A6F" style={styles.calendar}/>
+                    </TouchableOpacity>
+                    <Text style={styles.calendarText}>{dueDate}</Text>      
             </View>
             <DateTimePickerModal
                 isVisible={visible}
@@ -168,20 +142,27 @@ const GiftListAdd = (props) => {
                 onCancel={()=>{setVisible(false)}}
             />    
             <View style={styles.inputPair}>
-                <Text style={styles.dropDownLabel}>Add Friends to List: </Text>
+                <Text style={styles.wideInputLabel}>Friends on Gift List: </Text>
+                <TouchableOpacity 
+                onPress={()=>{setViewFriends(true)}}
+                style={styles.addFriendIcon}>
+                    <FontAwesome5 name="user-plus" size={16} color="black" />
+                </TouchableOpacity>
             </View>
             {viewFriends ? 
             <View style={styles.dropDown}>
-                <Text style = {styles.cancelText} onPress={()=>setViewFriends(false)}>close</Text>
+                <Text style = {styles.cancelText} onPress={()=>setViewFriends(false)}>
+                    <Ionicons name="md-close-outline" size={20} color="black" />
+                </Text>
                 <FlatList
                 data={friends}
                 renderItem={({item})=>{
                     return (
                         <View>
                             {inFriendList(item) ? <View/> : 
-                            <View style={styles.dropDownPair}>
+                            <View style={styles.inputPair}>
                                 <TouchableOpacity>
-                                    <Ionicons name="add" size={18} color="black" onPress={()=>{addFriendGiftList(item)}}/>
+                                    <Ionicons name="add" size={20} color="black" onPress={()=>{addFriendGiftList(item)}}/>
                                 </TouchableOpacity> 
                                 
                                 <Text 
@@ -193,12 +174,8 @@ const GiftListAdd = (props) => {
                     );}}/>
 
                     </View>
-            : <Text style={styles.dropDown} onPress={()=>{setViewFriends(true)}}>{selectFriend}</Text>}
-        
-        <View style={styles.inputPair}>
-            <Text style={styles.dropDownLabel}>Friends on Gift List: </Text>
-        </View>
-        <View style={styles.inputPair}>
+            : <View/>}
+
             <View style={styles.friendList}>
                 <FlatList 
                 data={friends}
@@ -206,20 +183,24 @@ const GiftListAdd = (props) => {
                     return (
                         <View>
                         {inFriendList(item) ? 
-                        <View style={styles.dropDownPair}>
+                        <View style={styles.inputPair}>
                             <TouchableOpacity 
                                 onPress={()=>{deleteFriendGiftList(item)}}>
-                                <Ionicons name="close" size={12} color="black" />
+                                <Ionicons style={styles.cancelIcon} name="md-close-outline" size={20} color="black" />
                             </TouchableOpacity>
                             <Text 
-                            style={styles.dropDownText}
+                            style={styles.friendListText}
                             >{item.firstName} {item.lastName}</Text>
                         </View> : <View/>}
                         </View>
                     );}}/>
             </View>  
-        </View>
+
         
+        <TouchableOpacity
+                    onPress={updateGiftList}
+                    style={styles.confirmButton}
+                ><Text style={styles.confirmText}>{'Confirm'}</Text></TouchableOpacity>
         </View>
     );
 }

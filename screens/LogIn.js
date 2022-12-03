@@ -20,7 +20,7 @@ function SignIn () {
   const [password, setPassword] = useState('');
   
   return (
-    <View style={styles.logInInfoContainer}>
+    <View style={styles.listContainer}>
       <Text style={styles.logInHeader}></Text>
       <Text style={styles.logInLabel}>Email: </Text>
       <TextInput 
@@ -72,7 +72,7 @@ function SignUp () {
   const [displayName, setDisplayName] = useState('');
 
   return (
-    <View style={styles.logInInfoContainer}>
+    <View style={styles.listContainer}>
       <Text style={styles.logInHeader}></Text>
       <Text style={styles.logInLabel}>Display Name: </Text>
       <TextInput 
@@ -162,7 +162,6 @@ function LogIn ({navigation}) {
     return (
       <KeyboardAwareScrollView>
       <View style={styles.container}>
-        <View style={styles.logInContainer}>
           <Text style={styles.appName}>Gift Tracker</Text>
           <FontAwesome5 name="gifts" size={125} color="#863A6F" />
           {loginMode?<SignIn/>:<SignUp/>}
@@ -184,7 +183,6 @@ function LogIn ({navigation}) {
             }
           </View>
         </View>
-      </View>
       </KeyboardAwareScrollView>
     )
 }
