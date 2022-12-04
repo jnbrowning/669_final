@@ -255,6 +255,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: '1%',
   },
+  addGiftIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1%',
+    paddingTop: '3%',
+  },
+  fullInputLabel: {
+    width: '93.5%',
+    padding: '1%',
+    marginTop: '3%',
+    fontSize: '16',
+    marginLeft: '7%',
+    paddingBottom: '3%',
+  },
+  fullInputText: {
+    width: '85%',
+    marginLeft: '3%',
+    marginRight: '2%',
+    borderColor: 'grey',
+    borderStyle: 'solid',
+    borderBottomWidth: '1%',
+    paddingBottom: '1%',
+    marginTop: '1%',
+    marginBottom: '3%',
+  },
 
 
   friendListText: {
@@ -274,10 +300,14 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     borderRadius: '100%',
   },
+
   confirmText: {
     color: 'white'
   },
 
+  overlayCancel: {
+    alignSelf: 'flex-end',
+  },
 
   
 
@@ -443,19 +473,19 @@ const styles = StyleSheet.create({
     margin: 0,
 
   },
-  overlayBox: {
-    flex: 0.4,
-    backgroundColor: 'white',
-    width: '100%',
-    alignItems: 'flex-start',
-    padding: '7% 3% 5% 5%'
-  },
+  // overlayBox: {
+  //   flex: 0.4,
+  //   backgroundColor: 'white',
+  //   width: '100%',
+  //   alignItems: 'flex-start',
+  //   padding: '1%'
+  // },
   overlayExpandBox: {
     flex: 0.75,
     backgroundColor: 'white',
     width: '100%',
     alignItems: 'flex-start',
-    padding: '7% 3% 5% 5%'
+    padding: '5%',
   },
   statusBundle: {
     flexDirection: 'row',
@@ -591,6 +621,34 @@ const styles = StyleSheet.create({
 
   screenStyle: {
     backgroundColor: 'pink'
+  },
+
+  overlayLabel: {
+      fontSize: '18',
+      textAlign: 'left',
+      width: '100%',
+      marginLeft: '3%',
+      paddingBottom: '2%',
+  },
+  overlayInfo: {
+    fontSize: '14',
+    textAlign: 'left',
+    width: '100%',
+    paddingBottom: '5%',
+  },
+  overlayGiftText: {
+    fontSize: 16,
+    paddingTop: '1%',
+    marginLeft: '2%',
+  },
+  addGiftPair: {
+    paddingLeft: '20%',
+    paddingTop: '3%',
+  },
+
+  friendHeader: {
+    paddingBottom: '5%',
+    paddingTop: '3%',
   },
   });
 

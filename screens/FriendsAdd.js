@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useState, useEffect } from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, Feather } from '@expo/vector-icons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import BackButton from '../components/BackButton';
 
 const FriendsAdd = (props) => {
 
@@ -101,43 +102,32 @@ const FriendsAdd = (props) => {
 
     return(
         <View style={styles.container}>
-            <View style={styles.headerButton}>
-                <TouchableOpacity
-                    onPress={()=>{navigation.navigate('Friends');}}
-                    >
-                    <Text style={styles.headerButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={()=>{
-                    if (!update) {
-                        addFriend();
-                    } else {
-                        updateFriend();
-                    }
-                    }}
-                ><Text style={styles.headerButtonText}>{update ? 'Update' : 'Save'}</Text></TouchableOpacity>
+            <View style={styles.detailHeaderContainer}>
+                <BackButton navigation={navigation}/>
+                <Text style={styles.friendHeader}>
+                    <FontAwesome5 name="user-friends" size={45} color="black" />
+                </Text>
             </View>
-            <Text style={styles.header}>{update ? 'Update Friend' : 'Add Friend'}</Text>
             <View style={styles.inputPair}>
                 <Text style={styles.inputLabel}>First Name:</Text>
                 <TextInput
-                    style={styles.inputText}
+                    style={styles.headInputText}
                     value={firstName}
                     onChangeText={(text)=>setFirstName(text)}/>
             </View>
             <View style={styles.inputPair}>
-            <Text style={styles.inputLabel}>Last Name:</Text>
-            <TextInput 
-                style={styles.inputText}
-                value={lastName}
-                onChangeText={(text)=>setLastName(text)}/>
+                <Text style={styles.inputLabel}>Last Name:</Text>
+                <TextInput 
+                    style={styles.headInputText}
+                    value={lastName}
+                    onChangeText={(text)=>setLastName(text)}/>
             </View>
             
             <View style={styles.inputPair}>
             <Text style={styles.inputLabel}>Birthday:</Text>
             <TouchableOpacity 
                 onPress={()=>setCalendarVisible(true)}>
-                    <Ionicons name="calendar-outline" size={24} color="red" style={styles.calendar}/>
+                    <Ionicons name="calendar-outline" size={20} color="#863A6F" style={styles.calendar}/>
                 </TouchableOpacity>
                 <Text style={styles.calendarText}>{birthDate}</Text>      
             </View>
@@ -146,19 +136,23 @@ const FriendsAdd = (props) => {
                 mode="date"
                 onConfirm={updateDate}
                 onCancel={()=>{setCalendarVisible(false)}}
-            /> 
-
-            <View style={styles.inputPair}>
-                <Text style={styles.inputLabel}>Interests:</Text>
+            />
+            <Text style={styles.fullInputLabel}>Interests:</Text>
             <TextInput 
-                style={styles.inputText}
+                style={styles.fullInputText}
                 value={interests}
                 onChangeText={(text)=>setInterests(text)}/>
+        
+            <View style={styles.inputPair}>
+                <Text style={styles.inputLabel}>Gift Ideas: </Text>
+                <TouchableOpacity 
+                onPress={()=>{setShowGiftSelector(true)}}
+                style={styles.addGiftIcon}>
+                    <Feather name="gift" size={20} color="black"/>
+                    <Ionicons name="add" size={12} color="black" />
+                </TouchableOpacity>
             </View>
 
-            <View style={styles.inputPair}>
-                <Text style={styles.dropDownLabel}>Add Gift Ideas: </Text>
-            </View>
             {showGiftSelector ? 
             <View style={styles.dropDown}>
                 <Text style = {styles.cancelText} onPress={()=>setShowGiftSelector(false)}>close</Text>
@@ -168,23 +162,19 @@ const FriendsAdd = (props) => {
                     return (
                         <View>
                             {inGiftList(item.key) ? <View/> : 
-                            <View style={styles.dropDownPair}>
+                            <View style={styles.inputPair}>
                                 <TouchableOpacity>
                                     <Ionicons name="add" size={18} color="black" onPress={()=>{checkGiftList(item.key)}}/>
                                 </TouchableOpacity> 
-                                
                                 <Text 
                                 style={styles.dropDownText}
                                 >{item.giftName}</Text>
                             </View> }
                         </View>);}}/>
                     </View>
-            : <Text style={styles.dropDown} onPress={()=>{setShowGiftSelector(true)}}>Select Gift Ideas</Text>}
+            : <View/>}
         
-        <View style={styles.inputPair}>
-            <Text style={styles.dropDownLabel}>Gift Ideas: </Text>
-        </View>
-        <View style={styles.inputPair}>
+
             <View style={styles.friendList}>
                 <FlatList 
                 data={gifts}
@@ -192,19 +182,30 @@ const FriendsAdd = (props) => {
                     return (
                         <View>
                             {inGiftList(item.key) ?  
-                            <View style={styles.dropDownPair}>
+                            <View style={styles.inputPair}>
                             <TouchableOpacity 
                                 onPress={()=>{removeGift(item)}}>
-                                <Ionicons name="close" size={12} color="black" />
+                                <Ionicons style={styles.cancelIcon} name="md-close-outline" size={20} color="black" />
                             </TouchableOpacity>
                             <Text 
-                            style={styles.dropDownText}
+                            style={styles.friendListText}
                             >{item.giftName}</Text> 
                             </View>: <View/> }
                         </View>
                     );}}/>
             </View>  
-        </View>
+                
+                <TouchableOpacity
+                    onPress={()=>{
+                    if (!update) {
+                        addFriend();
+                    } else {
+                        updateFriend();
+                    }
+                    }}
+                    style={styles.confirmButton}
+                ><Text style={styles.confirmText}>{update ? 'Update' : 'Save'}</Text></TouchableOpacity>
+
         </View>
     );
 }

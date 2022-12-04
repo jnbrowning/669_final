@@ -6,6 +6,8 @@ import { saveAndDispatch } from '../data/DB';
 import { useState, useEffect } from 'react';
 import { Icon } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons'; 
+import BackButton from '../components/BackButton';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const GiftAdd = (props) => {
 
@@ -80,43 +82,26 @@ const GiftAdd = (props) => {
     }
 
     return(
+        <KeyboardAwareScrollView>
         <View style={styles.container}>
-            <View style={styles.headerButton}>
-                <TouchableOpacity
-                    onPress={()=>{
-                        dispatch(savePicture({}, false));
-                        navigation.navigate('Gifts');}}
-                    >
-                    <Text style={styles.headerButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={()=>{
-                    if (!update) {
-                        addGift();
-                    } else {
-                        updateGift();
-                    }
-                    }}
-                ><Text style={styles.headerButtonText}>{update ? 'Update' : 'Save'}</Text></TouchableOpacity>
+            <View style={styles.detailHeaderContainer}>
+                <BackButton navigation={navigation}/>
             </View>
-            <Text style={styles.header}>{update ? 'Update Gift' : 'Add Gift'}</Text>
+            <Text style={styles.detailHeader}>{update ? 'Update Gift' : 'Add Gift'}</Text>
             {newPicture ?
                 <View style={styles.inputPair}>
                     <TouchableOpacity
-                onPress={()=> dispatch(savePicture({}, false))}
-                >
-                    <Icon 
-                                name="trash"
-                                type="font-awesome"
-                                size={30}
-                            />
-                </TouchableOpacity>
+                    onPress={()=> dispatch(savePicture({}, false))}
+                    style={styles.emojiButton}
+                ><Ionicons name="close-outline" size={40} color="red" /></TouchableOpacity>
+                
                 <Image
-                style={styles.addPicture}
+                style={styles.detailPicture}
                 source={giftPicture}
                 />
-                
                 </View>
+                
+              
                  : <View>
                  {update ? 
                     <Image
@@ -141,7 +126,6 @@ const GiftAdd = (props) => {
             </View>
             <View style={styles.inputPair}>
             <Text style={styles.inputLabel}>Price:</Text>
-
             <TextInput 
                 style={styles.inputText}
                 value={price}
@@ -155,15 +139,25 @@ const GiftAdd = (props) => {
                     value={from}
                     onChangeText={(text)=>setFrom(text)}/>
             </View>
-
-            <View style={styles.inputPair}>
-                <Text style={styles.inputLabel}>Description:</Text>
+            <Text style={styles.fullInputLabel}>Description:</Text>
                 <TextInput
-                    style={styles.inputText}
+                    style={styles.fullInputText}
                     value={detail}
                     onChangeText={(text)=>setDetail(text)}/>
-            </View>
+
+                <TouchableOpacity
+                    onPress={()=>{
+                    if (!update) {
+                        addGift();
+                    } else {
+                        updateGift();
+                    }
+                    }}
+                    style={styles.confirmButton}
+                ><Text style={styles.confirmText}>{update ? 'Update' : 'Save'}</Text></TouchableOpacity>
+
         </View>
+        </KeyboardAwareScrollView>
     );
 }
 

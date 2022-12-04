@@ -119,7 +119,8 @@ const GiftListAdd = (props) => {
                 </View>
                 <EmojiSelector onEmojiSelected={emoji => setEmoji(emoji)} style={styles.emojiBoard}/>
             </View>
-            : <View/>} 
+            : <View/>
+            } 
             <View style={styles.inputPair}>
                 <Text style={styles.inputLabel}>List Name:</Text>
                 <TextInput

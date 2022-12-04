@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import Modal from "react-native-modal";
 import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch, subscribeToFriends } from '../data/DB';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import GiftStatusBar from '../components/GiftStatusBar';
 import BackButton from '../components/BackButton';
 
@@ -104,7 +104,7 @@ const GiftListDetail = (props) => {
     for (f of friendGifts){
       //find friend in friend list and update gifts
       if (f.key === currentFriend) {
-        newGifts = f.gifts.slice();
+        const newGifts = f.gifts.slice();
         newGifts.splice(giftIndex, 1);
         let updateFriend = {
           firstName: f.firstName,
@@ -216,7 +216,9 @@ const GiftListDetail = (props) => {
       style={styles.overlay}>
               
         <View style={styles.overlayExpandBox}>
-        
+          <Text style = {styles.overlayCancel} onPress={()=>{setOverlayVisible(false); setGiftSelected(false)}}>
+                    <Ionicons name="md-close-outline" size={20} color="black" />
+            </Text>
           {giftSelected ? 
           <View style={styles.giftStatusOverlay}>
             <View style={styles.giftStatusPair}>
@@ -262,23 +264,34 @@ const GiftListDetail = (props) => {
           </View> 
           : 
           <View>
-          <Text>Gift Ideas: </Text>
+          <Text style={styles.overlayLabel}>Gift Ideas: </Text>
+          <View style={styles.overlayInfo}>
           <FlatList 
           data={gifts}
           renderItem={({item})=>{
             return (
               <View>
                 {inGiftList(item.key) ?  
-                <View style={styles.dropDownPair}>
-                  <Text onPress={()=>selectGift(item)} style={styles.dropDownText}>{item.giftName}</Text> 
-                </View>
+                <View style={styles.addGiftPair}>
+
+                  <TouchableOpacity 
+                  style={styles.addGift}
+                  onPress={()=>{selectGift(item)}}>
+                    <Feather name="gift" size={20} color="black"/>
+                    <Ionicons name="add" size={12} color="black" />
+                    <Text style={styles.overlayGiftText}> {item.giftName}</Text> 
+
+                  </TouchableOpacity>   
+                  </View>
                 : 
                 <View/>}
               </View> 
             );}}
           />
           </View>
+          </View>
           }
+
           
         </View>
         

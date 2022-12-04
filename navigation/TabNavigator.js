@@ -10,7 +10,6 @@ function TabNavigator() {
           <Tab.Screen 
             name='ListTab' 
             component={GiftListScreenNavigator}
-            
             options={{
                tabBarLabel: 'Gift Lists',
                 tabBarIcon: ({ color, size }) => (
