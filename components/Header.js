@@ -4,14 +4,13 @@ import { getFBAuth } from '../data/DB';
 import { signOut } from 'firebase/auth';
 import { actionTypes } from '../data/Reducer';
 import { Ionicons } from '@expo/vector-icons';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Header = (props) => {
 
-    const userName = useSelector((state)=>state.userName);
-    const { headerTitle, navigation } = props;
-    
     const dispatch = useDispatch();
+    const { headerTitle, navigation } = props;
+    const userName = useSelector((state)=>state.userName);
 
     return (
     <View style={styles.headerContainer}>
@@ -23,7 +22,7 @@ const Header = (props) => {
                         await signOut(getFBAuth());}}>
                         <Ionicons name="log-out-outline" size={24} color="white" />            
                     </TouchableOpacity>
-                <Text style={styles.header}>{userName}'s {headerTitle}</Text>
+                <Text style={styles.header}>{userName + "'s " + headerTitle}</Text>
                 </View>
     )
 }

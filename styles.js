@@ -602,7 +602,13 @@ const styles = StyleSheet.create({
     padding: '5%'
   },
   statusSave: {
-    padding: '5%'
+    padding: '4%',
+    backgroundColor: 'pink',
+    alignSelf: 'center',
+    marginTop: '5%',
+    borderRadius: '100%',
+    width: 90,
+    alignItems: 'center'
   },
 
   deleteSwipe: {

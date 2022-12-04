@@ -70,7 +70,7 @@ const loadUser = (state, displayName) => {
     userName: displayName,
   }
 }
-const setUser = (state, userid) => {
+const setUser = (state, userid, displayName) => {
   return {
       ...state,
       userID: userid,

@@ -1,7 +1,6 @@
 import styles from '../styles';
 import { useEffect, useState } from 'react';
 import { View, Text, TextInput, Alert, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { actionTypes } from '../data/Reducer';
 import { getFBAuth, saveAndDispatch } from '../data/DB';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -9,9 +8,9 @@ import {
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
     onAuthStateChanged, 
-    updateProfile,
   } from 'firebase/auth';
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import { useSelector, useDispatch } from 'react-redux';
 
  //Get FireBase Authentication
 function SignIn () {
@@ -142,16 +141,23 @@ function LogIn ({navigation}) {
     const dispatch = useDispatch();
     const [loginMode, setLoginMode] = useState(true);
 
+    const goToUser = async (user) => {
+      dispatch({
+        type: actionTypes.SET_USER,
+        payload: {
+          userid: user.uid
+        }
+      })
+      const loadUser = { type: actionTypes.LOAD_USER, payload: {userId: user.uid} };
+      await saveAndDispatch(loadUser, dispatch);
+      navigation.navigate('User'); 
+    }
+
     useEffect(() => {
       onAuthStateChanged(getFBAuth(), user => {
         if (user) {
-          dispatch({
-            type: actionTypes.SET_USER,
-            payload: {
-              userid: user.uid
-            }
-          })
-          navigation.navigate('User');
+          goToUser(user);
+    
         } else {
           setLoginMode(true);
           navigation.navigate('LogIn');

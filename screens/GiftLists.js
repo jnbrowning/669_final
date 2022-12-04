@@ -16,20 +16,17 @@ const GiftLists = ({navigation}) => {
 
     const userID = useSelector((state)=>state.userID);
     const giftLists = useSelector((state)=>state.giftListItems);
-    
+
     const dispatch = useDispatch();
 
     useEffect(() => {
         const loadGiftList = { type: actionTypes.LOAD_GIFT_LIST, payload: {userid: userID} };
         saveAndDispatch(loadGiftList, dispatch);
-        const loadUser = { type: actionTypes.LOAD_USER, payload: {userId: userID} };
-        saveAndDispatch(loadUser, dispatch);
         const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
         saveAndDispatch(loadGifts, dispatch);
         const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
         saveAndDispatch(loadFriends, dispatch);
-        console.log('userID = ', userID);
-    }, [ userID ]);
+    }, [userID]);
 
     const createList = async () => {
         const addList={
@@ -45,7 +42,7 @@ const GiftLists = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Header headerTitle={'Gift Lists'} navigation={navigation}/>
+            <Header headerTitle={"Gift Lists"} navigation={navigation}/>
             <View style={styles.listContainer}>
                 <FlatList
                 data={giftLists}
