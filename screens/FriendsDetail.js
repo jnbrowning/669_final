@@ -50,7 +50,7 @@ const FriendsDetail = (props) => {
                             <TouchableOpacity 
                             style={styles.giftIdeaItem}
                             onPress={()=>{viewGift(item)}}>
-                                <Text style={styles.giftIdeaText}><FontAwesome5 name="gifts" size={16} color="black" />  {item.giftName}</Text> 
+                                <Text style={styles.giftIdeaText}><FontAwesome5 name="gifts" size={16} color="#EA047E" />  {item.giftName}</Text> 
                             </TouchableOpacity>
                             : 
                             <View/> }

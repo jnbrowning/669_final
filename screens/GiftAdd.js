@@ -40,8 +40,9 @@ const GiftAdd = (props) => {
         let updatePicture;
         if (newPicture) {
             updatePicture = giftPicture;
+            console.log(giftPicture)
         }
-        else {
+        else{
             updatePicture = gift.picture;
         }
         const newGift = {
@@ -53,6 +54,8 @@ const GiftAdd = (props) => {
         }
         setGiftName('');
         setPrice('');
+        setDetail('');
+        setFrom('');
         dispatch(savePicture({}, false));
         return newGift;
     }
@@ -133,7 +136,7 @@ const GiftAdd = (props) => {
             </View>
 
             <View style={styles.inputPair}>
-                <Text style={styles.inputLabel}>From:</Text>
+                <Text style={styles.inputLabel}>Location:</Text>
                 <TextInput
                     style={styles.inputText}
                     value={from}

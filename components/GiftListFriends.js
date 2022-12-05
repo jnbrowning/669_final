@@ -12,11 +12,15 @@ import BackButton from '../components/BackButton';
 import FriendGiftOverlay from "./FriendGiftOverlay";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import GiftOptions from './GiftOptions';
+import { deleteGift } from '../data/Actions';
+import { current } from '@reduxjs/toolkit';
 
 const GiftListFriends = (props) => {
 
     const { list } = props;
     const friends = useSelector((state)=>state.friendItems);
+    const userID = useSelector((state)=>state.userID);
+
     const friendGifts = useSelector((state)=>state.friendGifts);
     const dispatch = useDispatch();
 
@@ -90,7 +94,7 @@ const GiftListFriends = (props) => {
         )
       }
 
-  deleteGift = () => {
+  const deleteGift = () => {
     for (f of friendGifts){
         //find friend in friend list and update gifts
         if (f.key === currentFriend) {
@@ -106,8 +110,7 @@ const GiftListFriends = (props) => {
         const updateAction = { type: actionTypes.UPDATE_FRIEND_GIFT_LIST, payload: { key: f.key, newFriendGifts: updateFriend, userid: userID, listid: list.key }}
         saveAndDispatch(updateAction, dispatch);
         }
-        //clear inputs for next entry
-        clearInputs();
+
     }}
 
     //Swipeable
@@ -115,7 +118,7 @@ const GiftListFriends = (props) => {
         return (
             <TouchableOpacity 
             style={styles.deleteSwipe} 
-            onPress={()=>{saveAndDispatch(deleteGift(), dispatch)}}>
+            onPress={()=>deleteGift()}>
                 <Text style={styles.deleteSwipeText}>DELETE</Text>
             </TouchableOpacity>
         );
@@ -133,8 +136,8 @@ const GiftListFriends = (props) => {
                         <TouchableOpacity 
                         style={styles.addGift}
                         onPress={() => {getGiftIdeaList(item.key)}}>
-                        <Feather name="gift" size={20} color="black"/>
-                        <Ionicons name="add" size={12} color="black" />
+                        <Feather name="gift" size={20} color="white"/>
+                        <Ionicons name="add" size={12} color="white" />
                         </TouchableOpacity>   
                     </View>
                     <FlatList
@@ -143,6 +146,7 @@ const GiftListFriends = (props) => {
                         return (
                         <Swipeable
                         renderRightActions={renderRightActions}
+                        onSwipeableOpen={()=>(setCurrentFriend(item.friendID))}
                         overshootFriction={8}>
                         <TouchableOpacity 
                         style={styles.giftItemDetail}

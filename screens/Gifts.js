@@ -33,7 +33,7 @@ const Gifts = ({navigation}) => {
 
     return(
         <View style={styles.container}>
-            <Header headerTitle={'Gifts'} navigation={navigation}/>
+            <Header headerTitle={'Gift Ideas'} navigation={navigation}/>
             <View style={styles.listContainer}>
             <FlatList
             data={giftItems}

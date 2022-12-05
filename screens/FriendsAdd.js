@@ -17,6 +17,17 @@ const FriendsAdd = (props) => {
     const gifts = useSelector((state)=>state.giftItems);
     const dispatch = useDispatch();
 
+
+    [update, setUpdate] = useState(false);
+    [showGiftSelector, setShowGiftSelector] = useState(false);
+    [calendarVisible, setCalendarVisible] = useState(false);
+
+    [firstName, setFirstName] = useState(friend.firstName);
+    [lastName, setLastName] = useState(friend.lastName);
+    [birthDate, setBirthDate] = useState(friend.birthDate);
+    [interests, setInterests] = useState(friend.interests);
+    [giftIdeas, setGiftIdeas] = useState(friend.giftIdeas);
+
     const inGiftList = (obj) => {
         for (g of giftIdeas){
           if (g === obj) {
@@ -51,15 +62,6 @@ const FriendsAdd = (props) => {
     setCalendarVisible(false);
     }
 
-    [update, setUpdate] = useState(false);
-    [showGiftSelector, setShowGiftSelector] = useState(false);
-    [calendarVisible, setCalendarVisible] = useState(false);
-
-    [firstName, setFirstName] = useState(friend.firstName);
-    [lastName, setLastName] = useState(friend.lastName);
-    [birthDate, setBirthDate] = useState(friend.birthDate);
-    [interests, setInterests] = useState(friend.interests);
-    [giftIdeas, setGiftIdeas] = useState(friend.giftIdeas);
 
     const clearInputs = () => {
         const newFriend = {
@@ -127,7 +129,7 @@ const FriendsAdd = (props) => {
             <Text style={styles.inputLabel}>Birthday:</Text>
             <TouchableOpacity 
                 onPress={()=>setCalendarVisible(true)}>
-                    <Ionicons name="calendar-outline" size={20} color="#863A6F" style={styles.calendar}/>
+                    <Ionicons name="calendar-outline" size={20} color="#EA047E" style={styles.calendar}/>
                 </TouchableOpacity>
                 <Text style={styles.calendarText}>{birthDate}</Text>      
             </View>
@@ -148,8 +150,8 @@ const FriendsAdd = (props) => {
                 <TouchableOpacity 
                 onPress={()=>{setShowGiftSelector(true)}}
                 style={styles.addGiftIcon}>
-                    <Feather name="gift" size={20} color="black"/>
-                    <Ionicons name="add" size={12} color="black" />
+                    <Feather name="gift" size={20} color="#EA047E"/>
+                    <Ionicons name="add" size={12} color="#EA047E" />
                 </TouchableOpacity>
             </View>
 

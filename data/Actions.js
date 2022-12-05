@@ -9,7 +9,7 @@ const addGiftList = (addList, userID) => {
         }
 }};
 
-const deleteFriend = (item) => {
+const deleteFriend = (item, userID) => {
     return {
         type: actionTypes.DELETE_FRIEND, 
         payload: {

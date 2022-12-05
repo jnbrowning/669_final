@@ -15,14 +15,14 @@ const styles = StyleSheet.create({
   },
   itemText: {
     padding: '2%',
-    fontSize: '20',
-    textAlign: 'center',
+    fontSize: '18',
+    marginLeft: '15%',
   },
 
   //HEADER (GIFT LIST, GIFTS, FRIENDS)
   headerContainer: {
     paddingTop: '10%',
-    backgroundColor: '#863A6F',
+    backgroundColor: '#492C7A',
     width: '100%',
   },
   header: {
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%'
   },
   mainAddButton: {
-    backgroundColor: '#863A6F',
+    backgroundColor: '#492C7A',
     width: 65,
     height: 65,
     borderRadius: '100%',
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     fontSize: '40',
     paddingBottom: '12%',
     marginTop: '30%',
+    color: '#492C7A'
   },
   logInText: {
     fontSize: '16',
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   },
   logInButton: {
     alignSelf: 'center',
-    backgroundColor: '#863A6F',
+    backgroundColor: '#492C7A',
     padding: '3%',
     width: '35%',
     alignItems: 'center',
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
   },
 
   confirmButton: {
-    backgroundColor: '#863A6F',
+    backgroundColor: '#492C7A',
     padding: '3%',
     paddingLeft: '5%',
     paddingRight: '5%',
@@ -490,25 +491,23 @@ const styles = StyleSheet.create({
   statusBundle: {
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: 'red',
+
     width: '100%',
   },
   statusButton: {
-    backgroundColor: '#CFF5E7',
+    backgroundColor: '#EBF3C9',
     flex: 0.2,
     justifyContent: 'center'
   },
   activeStatusButton: {
-    backgroundColor: '#59C1BD',
+    backgroundColor: '#86AD3D',
     flex: 0.2,
     justifyContent: 'center'
   },
   giftListFriends: {
-    width: '90%'
+    width: '100%'
   },
-  friendName: {
-    fontSize: '22',
-  },
+ 
   addGift: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -516,13 +515,17 @@ const styles = StyleSheet.create({
   friendGiftPair: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#A4BE7B',
-    borderTopRightRadius: '20%',
+    backgroundColor: '#2F2963',
     padding: '1%',
     paddingLeft: '2%',
     marginTop: '1%',
     alignItems: 'center',
   },
+  friendName: {
+    fontSize: '22',
+    color: 'white',
+  },
+
   giftItemDetail: {
     paddingLeft: '2%',
     paddingTop: '1%',
@@ -603,7 +606,7 @@ const styles = StyleSheet.create({
   },
   statusSave: {
     padding: '4%',
-    backgroundColor: 'pink',
+    backgroundColor: '#2F2963',
     alignSelf: 'center',
     marginTop: '5%',
     borderRadius: '100%',

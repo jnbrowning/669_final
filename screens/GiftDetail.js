@@ -25,7 +25,7 @@ const GiftDetail = (props) => {
             </View>
             <Text style={styles.detailLabel}><Ionicons name="pricetag-outline" size={18} color="black" />  Price: </Text>
             <Text style={styles.detailInfo}>{gift.price}</Text>
-            <Text style={styles.detailLabel}><Ionicons name="ios-location-outline" size={18} color="black" />  From: </Text>
+            <Text style={styles.detailLabel}><Ionicons name="ios-location-outline" size={18} color="black" />  Location: </Text>
             <Text style={styles.detailInfo}>{gift.from}</Text>
             <Text style={styles.detailLabel}><Ionicons name="ios-document-text-outline" size={18} color="black" />  Decription: </Text>
             <Text style={styles.detailInfo}>{gift.detail}</Text>

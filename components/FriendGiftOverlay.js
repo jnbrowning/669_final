@@ -103,7 +103,7 @@ const FriendGiftOverlay = (props) => {
             <TouchableOpacity
             style={styles.statusSave}
             onPress={addFriendGiftList}>
-              <Text>{update ? 'Save' : 'Add Gift'}</Text>
+              <Text style={{color: 'white'}}>{update ? 'Save' : 'Add Gift'}</Text>
             </TouchableOpacity>
           </View> 
     )

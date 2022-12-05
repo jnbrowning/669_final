@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity } from 'react-native';
 import styles from '../styles';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { saveAndDispatch } from '../data/DB';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
@@ -8,15 +8,18 @@ import { deleteFriend } from '../data/Actions';
 
 const FriendItem = (props) => {
 
+    const userID = useSelector((state)=>state.userID);
+
     const { friendItem, navigation } = props
     const dispatch = useDispatch();
+
 
     //Swipeable
     const renderRightActions = () => {
         return (
             <TouchableOpacity 
             style={styles.deleteSwipe} 
-            onPress={()=>{saveAndDispatch(deleteFriend(friendItem), dispatch)}}>
+            onPress={()=>{saveAndDispatch(deleteFriend(friendItem, userID), dispatch)}}>
                 <Text style={styles.deleteSwipeText}>DELETE</Text>
             </TouchableOpacity>
         );

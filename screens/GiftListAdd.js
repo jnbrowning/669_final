@@ -132,7 +132,7 @@ const GiftListAdd = (props) => {
                 <Text style={styles.inputLabel}>Due Date:</Text>
                 <TouchableOpacity 
                     onPress={()=>setVisible(true)}>
-                        <Ionicons name="calendar-outline" size={20} color="#863A6F" style={styles.calendar}/>
+                        <Ionicons name="calendar-outline" size={20} color="#EA047E" style={styles.calendar}/>
                     </TouchableOpacity>
                     <Text style={styles.calendarText}>{dueDate}</Text>      
             </View>
@@ -147,7 +147,7 @@ const GiftListAdd = (props) => {
                 <TouchableOpacity 
                 onPress={()=>{setViewFriends(true)}}
                 style={styles.addFriendIcon}>
-                    <FontAwesome5 name="user-plus" size={16} color="black" />
+                    <FontAwesome5 name="user-plus" size={16} color="#EA047E" />
                 </TouchableOpacity>
             </View>
             {viewFriends ? 

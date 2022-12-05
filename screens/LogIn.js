@@ -10,7 +10,7 @@ import {
     onAuthStateChanged, 
   } from 'firebase/auth';
 import { FontAwesome5 } from '@expo/vector-icons'; 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
  //Get FireBase Authentication
 function SignIn () {
@@ -169,21 +169,21 @@ function LogIn ({navigation}) {
       <KeyboardAwareScrollView>
       <View style={styles.container}>
           <Text style={styles.appName}>Gift Tracker</Text>
-          <FontAwesome5 name="gifts" size={125} color="#863A6F" />
+          <FontAwesome5 name="gifts" size={125} color="#492C7A" />
           {loginMode?<SignIn/>:<SignUp/>}
           <View>
             { loginMode ? 
             <Text style={styles.logInText}>New user? 
               <Text
               onPress={()=>{setLoginMode(!loginMode)}} 
-              style={{color: '#863A6F'}}> Sign up </Text> 
+              style={{color: '#86AD3D'}}> Sign up </Text> 
               instead!
             </Text>
             :
             <Text style={styles.logInText}>Returning user? 
               <Text 
               onPress={()=>{setLoginMode(!loginMode)}} 
-              style={{color: '#863A6F'}}> Sign in </Text> 
+              style={{color: '#86AD3D'}}> Sign in </Text> 
               instead!
             </Text>
             }
