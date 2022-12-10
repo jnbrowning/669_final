@@ -3,10 +3,9 @@ import { View, Text,  TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Camera, CameraType } from 'expo-camera';
-import { actionTypes } from '../data/Reducer';
 import { Feather } from '@expo/vector-icons'; 
 import styles from '../styles';
-
+import { savePicture } from '../data/Actions';
 
 const CameraScreen = (props) => {
 
@@ -22,16 +21,7 @@ const CameraScreen = (props) => {
 
     const dispatch = useDispatch();
 
-    const savePicture = (pictureObject, updateValue) => {
-      return {
-        type: actionTypes.PREVIEW_PICTURE,
-        payload: {
-          picture: pictureObject,
-          updatePicture: updateValue
-        }
-      }
-    }
-
+    
     useEffect(()=>{
         getPermissions();
       }, []);
@@ -77,7 +67,5 @@ const CameraScreen = (props) => {
       );
     
 }
-
-
 
 export default CameraScreen;

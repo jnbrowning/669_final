@@ -3,10 +3,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import styles from '../styles';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { useEffect } from 'react';
-import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch, subscribeToFriends } from '../data/DB';
 import BackButton from '../components/BackButton';
 import GiftListFriends from '../components/GiftListFriends';
+import { loadFriendGifts } from '../data/Actions';
 
 const GiftListDetail = (props) => {
 
@@ -18,8 +18,7 @@ const GiftListDetail = (props) => {
 
   useEffect(() => {
     //load list of friends and gifts
-    const loadFriendGifts = { type: actionTypes.LOAD_FRIEND_GIFT_LIST, payload: {userid: userID, listid: list.key}}
-    saveAndDispatch(loadFriendGifts, dispatch);
+    saveAndDispatch(loadFriendGifts(userID, list.key), dispatch);
     //subscribe to updates on friend gifts to see live updates
     subscribeToFriends(userID, list.key);
     console.log(list);

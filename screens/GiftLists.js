@@ -2,7 +2,6 @@ import { View, FlatList } from 'react-native';
 import { useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { addGiftList } from '../data/Actions';
 
@@ -11,6 +10,7 @@ import Header from '../components/Header';
 import BigAddButton from '../components/BigAddButton';
 import GiftListItem from '../components/GiftListItem';
 
+import { loadGiftList, loadGifts, loadFriends } from '../data/Actions';
 
 const GiftLists = ({navigation}) => {
 
@@ -20,12 +20,9 @@ const GiftLists = ({navigation}) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const loadGiftList = { type: actionTypes.LOAD_GIFT_LIST, payload: {userid: userID} };
-        saveAndDispatch(loadGiftList, dispatch);
-        const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
-        saveAndDispatch(loadGifts, dispatch);
-        const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
-        saveAndDispatch(loadFriends, dispatch);
+        saveAndDispatch(loadGiftList(userID), dispatch);
+        saveAndDispatch(loadGifts(userID), dispatch);
+        saveAndDispatch(loadFriends(userID), dispatch);
     }, [userID]);
 
     const createList = async () => {

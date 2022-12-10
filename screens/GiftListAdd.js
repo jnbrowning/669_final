@@ -1,13 +1,13 @@
 import { View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import styles from '../styles';
 import { useDispatch, useSelector } from "react-redux";
-import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch, subscribeToFriends } from '../data/DB';
 import { useState, useEffect } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import EmojiSelector from 'react-native-emoji-selector';
 import BackButton from '../components/BackButton';
+import { loadFriends, loadFriendGifts, addFriendGifts, deleteFriendGifts, updateGiftList } from '../data/Actions';
 
 const GiftListAdd = (props) => {
 
@@ -49,10 +49,8 @@ const GiftListAdd = (props) => {
     }
 
     useEffect(() => {
-        const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
-        saveAndDispatch(loadFriends, dispatch);
-        const loadFriendGifts = { type: actionTypes.LOAD_FRIEND_GIFT_LIST, payload: {userid: userID, listid: list.key}}
-        saveAndDispatch(loadFriendGifts, dispatch);
+        saveAndDispatch(loadFriends(userID), dispatch);
+        saveAndDispatch(loadFriendGifts(userID, list.key), dispatch);
         subscribeToFriends(userID, list.key);
       }, []);
 
@@ -62,27 +60,17 @@ const GiftListAdd = (props) => {
             lastName: friend.lastName, 
             gifts: []
         }
-        const addAction = { type: actionTypes.ADD_FRIEND_GIFT_LIST, payload: { newFriendGifts: newFriendGift, key: friend.key, userid: userID, listid: list.key }};
-        saveAndDispatch(addAction, dispatch);
+        saveAndDispatch(addFriendGifts(newFriendGift, friend.key, userID, list.key), dispatch);
     }
 
-    const deleteFriendGiftList = (item) => {
-        action = {
-            type: actionTypes.DELETE_FRIEND_GIFT_LIST, 
-            payload: {
-                key: item.key,
-                userid: userID,
-                listid: list.key,
-            }
-        }
-        saveAndDispatch(action, dispatch);
+    const deleteFriendGiftList = (item) => {  
+        saveAndDispatch(deleteFriendGifts(item.key, userID, list.key), dispatch);
     };
 
-    const updateGiftList = () => {
+    const updateGiftLists = () => {
         const newGiftList = clearInputs();
-        const updateAction = { type: actionTypes.UPDATE_GIFT_LIST, payload: { key: list.key, newList: newGiftList, userid: userID }}
         navigation.navigate('GiftList');
-        saveAndDispatch(updateAction, dispatch);
+        saveAndDispatch(updateGiftList(list.key, newGiftList, userID), dispatch);
     }
 
     const updateDate = (date) => {
@@ -177,7 +165,7 @@ const GiftListAdd = (props) => {
                     </View>
             : <View/>}
 
-            <View style={styles.friendList}>
+            <View style={styles.addedItemsList}>
                 <FlatList 
                 data={friends}
                 renderItem={({item})=>{
@@ -199,7 +187,7 @@ const GiftListAdd = (props) => {
 
         
         <TouchableOpacity
-                    onPress={updateGiftList}
+                    onPress={updateGiftLists}
                     style={styles.confirmButton}
                 ><Text style={styles.confirmText}>{'Confirm'}</Text></TouchableOpacity>
         </View>

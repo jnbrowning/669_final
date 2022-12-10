@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
   listContainer: {
     width: '100%',
     marginTop: '2%',
+    height: '71%'
   },
   itemText: {
     padding: '2%',
@@ -63,9 +64,13 @@ const styles = StyleSheet.create({
     marginTop: '30%',
     color: '#492C7A'
   },
+  logInContainer: {
+    width: '100%',
+    marginTop: '2%',
+    marginBottom: '5%'
+  },
   logInText: {
     fontSize: '16',
-    margin: '7%',
   },
   logInHeader: {
     fontSize: '25',
@@ -73,7 +78,7 @@ const styles = StyleSheet.create({
     margin: '5%',
     paddingTop: '7%'
   },
-  logInLabel: { 
+  logInLabel: {
     fontSize: '14',
     marginLeft: '17%',
   },
@@ -95,6 +100,51 @@ const styles = StyleSheet.create({
   logInButtonText: {
     fontSize: '16',
     color: 'white'
+  },
+
+  //DELETE SWIPEABLE
+  deleteSwipe: {
+    backgroundColor: 'red',
+    margin: 0,
+    justifyContent: 'center',
+    width: 75,
+    height: '100%',
+    alignItems: 'center',
+  },
+  deleteSwipeText: {
+    color: 'white',
+  },
+
+  //GIFT LISTS
+  emojiHeader: {
+    fontSize: '75',
+  },
+  giftListContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flex: 1,
+    paddingBottom: '3%',
+    paddingTop: '3%',
+    paddingLeft: '7%',
+    margin: 0,
+  },
+  giftListEmoji: {
+    fontSize: '40',
+    paddingRight: '5%',
+  },
+  giftListSelect: {
+    height: '100%',
+    justifyContent: 'center',
+  },
+  giftListName: {
+    fontSize: '20',
+    paddingBottom: '1%'
+  },
+  giftListDate: {
+    fontStyle: 'italic',
+    fontSize: '12',
+    color: 'grey',
   },
 
   //DETAIL PAGES
@@ -310,48 +360,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  //GIFT LISTS
-  giftListContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1,
-    paddingBottom: '3%',
-    paddingTop: '3%',
-    paddingLeft: '7%',
-    margin: 0,
-  },
-  giftListEmoji: {
-    fontSize: '40',
-    paddingRight: '5%',
-  },
-  giftListSelect: {
-    height: '100%',
-    justifyContent: 'center',
-  },
-  giftListName: {
-    fontSize: '20',
-    paddingBottom: '1%'
-  },
-  giftListDate: {
-    fontStyle: 'italic',
-    fontSize: '12',
-    color: 'grey',
-  },
-
   //List Pages
   addButton: {
     alignItems: 'center',
@@ -413,15 +421,21 @@ const styles = StyleSheet.create({
   cancelText: {
     textAlign: 'right'
   },
-  emojiHeader: {
-    fontSize: '75',
-  },
+
   friendList: {
     width: '90%',
     textAlign: 'left',
     padding: '1%',
     marginBottom: '1%',
     marginLeft: '5%',
+  },
+  addedItemsList: {
+    width: '90%',
+    textAlign: 'left',
+    padding: '1%',
+    marginBottom: '1%',
+    marginLeft: '5%',
+    flex: 0.9
   },
 
 //GIFTS
@@ -505,7 +519,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   giftListFriends: {
-    width: '100%'
+    width: '100%',
+    flex: 1
   },
  
   addGift: {
@@ -613,20 +628,6 @@ const styles = StyleSheet.create({
     width: 90,
     alignItems: 'center'
   },
-
-  deleteSwipe: {
-    backgroundColor: 'red',
-    margin: 0,
-    justifyContent: 'center',
-    width: 75,
-    height: '100%',
-    alignItems: 'center',
-  },
-  deleteSwipeText: {
-    color: 'white',
-  },
-
-
 
   screenStyle: {
     backgroundColor: 'pink'

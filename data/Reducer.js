@@ -44,10 +44,6 @@ const initialState = {
   updatePicture: false,
   friendGifts: [],
 }
-
-/////////
-//STATE//
-/////////
 const clearData = (state) => {
   return {
     ...state,
@@ -70,7 +66,7 @@ const loadUser = (state, displayName) => {
     userName: displayName,
   }
 }
-const setUser = (state, userid, displayName) => {
+const setUser = (state, userid) => {
   return {
       ...state,
       userID: userid,

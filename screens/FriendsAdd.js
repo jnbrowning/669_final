@@ -1,12 +1,12 @@
 import { View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import styles from '../styles';
 import { useDispatch, useSelector } from "react-redux";
-import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useState, useEffect } from 'react';
 import { Ionicons, FontAwesome5, Feather } from '@expo/vector-icons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import BackButton from '../components/BackButton';
+import { addFriend, loadGifts, updateFriend } from '../data/Actions';
 
 const FriendsAdd = (props) => {
 
@@ -62,7 +62,6 @@ const FriendsAdd = (props) => {
     setCalendarVisible(false);
     }
 
-
     const clearInputs = () => {
         const newFriend = {
             firstName: firstName,
@@ -86,19 +85,20 @@ const FriendsAdd = (props) => {
         else {
           setUpdate(true);
         }
+        console.log(friend);
+        loadGifts(userID);
+        console.log(giftIdeas);
       }, []);
 
-    const addFriend = () => {
+    const friendAdd = () => {
         const newFriend = clearInputs();
-        const addAction = { type: actionTypes.ADD_FRIEND, payload: { newFriend: newFriend, userid: userID }};
-        saveAndDispatch(addAction, dispatch);
+        saveAndDispatch(addFriend(newFriend, userID), dispatch);
         navigation.navigate('Friends');
     }
 
-    const updateFriend = () => {
+    const friendUpdate = () => {
         const newFriends = clearInputs();
-        const updateAction = { type: actionTypes.UPDATE_FRIEND, payload: { key: friend.key, newFriend: newFriends, userid: userID }}
-        saveAndDispatch(updateAction, dispatch);
+        saveAndDispatch(updateFriend(friend.key, newFriends, userID), dispatch);
         navigation.navigate('Friends');
     }
 
@@ -177,7 +177,7 @@ const FriendsAdd = (props) => {
             : <View/>}
         
 
-            <View style={styles.friendList}>
+            <View style={styles.addedItemsList}>
                 <FlatList 
                 data={gifts}
                 renderItem={({item})=>{
@@ -200,9 +200,9 @@ const FriendsAdd = (props) => {
                 <TouchableOpacity
                     onPress={()=>{
                     if (!update) {
-                        addFriend();
+                        friendAdd();
                     } else {
-                        updateFriend();
+                        friendUpdate();
                     }
                     }}
                     style={styles.confirmButton}

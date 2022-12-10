@@ -1,13 +1,12 @@
 import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 import styles from '../styles';
 import { useDispatch, useSelector } from "react-redux";
-import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useState, useEffect } from 'react';
-import { Icon } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons'; 
 import BackButton from '../components/BackButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { savePicture, addGifts, updateGifts } from '../data/Actions';
 
 const GiftAdd = (props) => {
 
@@ -16,16 +15,6 @@ const GiftAdd = (props) => {
     const newPicture = useSelector((state)=>state.updatePicture);
     const dispatch = useDispatch();
     
-    const savePicture = (pictureObject, updateValue) => {
-        return {
-          type: actionTypes.PREVIEW_PICTURE,
-          payload: {
-            picture: pictureObject,
-            updatePicture: updateValue
-          }
-        }
-    }
-
     const { navigation, route } = props;
     const { gift } = route.params;
 
@@ -72,16 +61,14 @@ const GiftAdd = (props) => {
 
     const addGift = () => {
         const newGift = clearInputs();
-        const addAction = { type: actionTypes.ADD_GIFT, payload: { newGift: newGift, userid: userID }};
+        saveAndDispatch(addGifts(newGift, userID), dispatch);
         navigation.navigate('Gifts');
-        saveAndDispatch(addAction, dispatch);
     }
 
     const updateGift = () => {
         const newGift = clearInputs();
-        const updateAction = { type: actionTypes.UPDATE_GIFT, payload: { key: gift.key, newGift: newGift, userid: userID }}
+        saveAndDispatch(updateGifts(gift.key, newGift, userID), dispatch);
         navigation.navigate('Gifts');
-        saveAndDispatch(updateAction, dispatch);
     }
 
     return(

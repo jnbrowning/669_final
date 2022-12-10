@@ -1,19 +1,16 @@
-import { View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import styles from '../styles';
 import { Feather } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux'; 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Modal from "react-native-modal";
-import { actionTypes } from '../data/Reducer';
-import { saveAndDispatch, subscribeToFriends } from '../data/DB';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { saveAndDispatch } from '../data/DB';
+import { Ionicons } from '@expo/vector-icons';
 import GiftStatusBar from '../components/GiftStatusBar';
-import BackButton from '../components/BackButton';
 import FriendGiftOverlay from "./FriendGiftOverlay";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import GiftOptions from './GiftOptions';
-import { deleteGift } from '../data/Actions';
-import { current } from '@reduxjs/toolkit';
+import { updateFriendGifts } from '../data/Actions';
 
 const GiftListFriends = (props) => {
 
@@ -34,6 +31,7 @@ const GiftListFriends = (props) => {
     [giftIdeas, setGiftIdeas] = useState([]);
     //for overlay, whether user is updating or adding gift idea
     [update, setUpdate] = useState(false);
+    [giftIndex, setIndex] = useState(0);
 
     [updateGift, setUpdateGift] = useState({
         giftKey: '',
@@ -74,43 +72,39 @@ const GiftListFriends = (props) => {
         console.log(gift)
     }
 
-  [giftIndex, setIndex] = useState(0);
-
-      //set values to update gift idea for friend
-      const selectUpdateGift = (gift, index) => {
-        setUpdate(true);
-        setGiftSelected(true);
-        setOverlayVisible(true);
-        setCurrentFriend(gift.friendID);
-        setIndex(index);
-        setUpdateGift(
-            {
-                giftKey: gift.giftKey,
-                giftName: gift.giftName,
-                giftStatus: gift.giftStatus,
-                price: gift.price,
-                notes: gift.notes,
-            }
-        )
-      }
+    //set values to update gift idea for friend
+    const selectUpdateGift = (gift, index) => {
+    setUpdate(true);
+    setGiftSelected(true);
+    setOverlayVisible(true);
+    setCurrentFriend(gift.friendID);
+    setIndex(index);
+    setUpdateGift(
+        {
+            giftKey: gift.giftKey,
+            giftName: gift.giftName,
+            giftStatus: gift.giftStatus,
+            price: gift.price,
+            notes: gift.notes,
+        }
+    )
+    }
 
   const deleteGift = () => {
     for (f of friendGifts){
         //find friend in friend list and update gifts
         if (f.key === currentFriend) {
-        const newGifts = f.gifts.slice();
-        newGifts.splice(giftIndex, 1);
-        let updateFriend = {
-            firstName: f.firstName,
-            lastName: f.lastName,
-            gifts: newGifts
+            const newGifts = f.gifts.slice();
+            newGifts.splice(giftIndex, 1);
+            let updateFriend = {
+                firstName: f.firstName,
+                lastName: f.lastName,
+                gifts: newGifts
+            }
+            console.log(updateFriend.gifts)
+            //update Firebase with new friend gift info
+            saveAndDispatch(updateFriendGifts(f.key, updateFriend, userID, list.key), dispatch);
         }
-        console.log(updateFriend.gifts)
-        //update Firebase with new friend gift info
-        const updateAction = { type: actionTypes.UPDATE_FRIEND_GIFT_LIST, payload: { key: f.key, newFriendGifts: updateFriend, userid: userID, listid: list.key }}
-        saveAndDispatch(updateAction, dispatch);
-        }
-
     }}
 
     //Swipeable

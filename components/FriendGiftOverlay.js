@@ -1,13 +1,10 @@
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import styles from '../styles';
-import { Feather } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux'; 
-import { useState, useEffect } from 'react';
-import { actionTypes } from '../data/Reducer';
-import { saveAndDispatch, subscribeToFriends } from '../data/DB';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { useState } from 'react';
+import { saveAndDispatch } from '../data/DB';
 import GiftStatusBar from '../components/GiftStatusBar';
-import BackButton from '../components/BackButton';
+import { updateFriendGifts } from '../data/Actions';
 
 const FriendGiftOverlay = (props) => {
 
@@ -55,8 +52,7 @@ const FriendGiftOverlay = (props) => {
                 gifts: newGifts
             }
             //update Firebase with new friend gift info
-            const updateAction = { type: actionTypes.UPDATE_FRIEND_GIFT_LIST, payload: { key: f.key, newFriendGifts: updateFriend, userid: userID, listid: list.key }}
-            saveAndDispatch(updateAction, dispatch);
+            saveAndDispatch(updateFriendGifts(f.key, updateFriend, userID, list.key), dispatch);
             }
             //clear inputs for next entry
             clearInputs();

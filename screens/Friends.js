@@ -1,12 +1,12 @@
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import styles from '../styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useEffect } from 'react';
 import Header from '../components/Header';
 import BigAddButton from '../components/BigAddButton';
 import FriendItem from '../components/FriendItem';
+import { loadGifts, loadFriends } from '../data/Actions';
 
 const Friends = ({navigation}) => {
 
@@ -16,10 +16,8 @@ const Friends = ({navigation}) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
-        saveAndDispatch(loadGifts, dispatch);
-        const loadFriends = { type: actionTypes.LOAD_FRIEND, payload: {userid: userID} };
-        saveAndDispatch(loadFriends, dispatch);
+        saveAndDispatch(loadGifts(userID), dispatch);
+        saveAndDispatch(loadFriends(userID), dispatch);
     }, []);
 
     const addFriend = () => {

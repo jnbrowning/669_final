@@ -1,12 +1,12 @@
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList } from 'react-native';
 import styles from '../styles';
 import { useSelector, useDispatch } from "react-redux";
-import { actionTypes } from '../data/Reducer';
 import { saveAndDispatch } from '../data/DB';
 import { useEffect } from 'react';
 import Header from '../components/Header';
 import BigAddButton from '../components/BigAddButton';
 import GiftItem from '../components/GiftItem';
+import { loadGifts } from '../data/Actions';
 
 const Gifts = ({navigation}) => {
 
@@ -15,8 +15,7 @@ const Gifts = ({navigation}) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const loadGifts = { type: actionTypes.LOAD_GIFT, payload: {userid: userID} };
-        saveAndDispatch(loadGifts, dispatch);
+        saveAndDispatch(loadGifts(userID), dispatch);
     }, [ userID ]);
 
     addGift = () => {
